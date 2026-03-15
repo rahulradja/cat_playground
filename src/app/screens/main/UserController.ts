@@ -1,7 +1,6 @@
 import { Texture, Sprite } from "pixi.js"
 
 import {
-    randomFloat,
     randomInt,
 } from "../../../engine/utils/random";
 
@@ -49,7 +48,7 @@ export class User extends Sprite {
 
         
     constructor(protected _settings: CatSettings) {
-        super({ texture: Texture.from(_settings.sitting), anchor: 0.5, scale: 0.25 });
+        super({ texture: Texture.from(_settings.sitting), anchor: 0.5, scale: _settings.scale });
         this.direction = randomInt(0, 3);
         this.speed = this._settings.walkingSpeed
         window.addEventListener("keydown", (e) => {
@@ -105,7 +104,7 @@ export class User extends Sprite {
     }
 
     private setDirection(): void {
-        if (!this.isWalking) { return; }
+        if (!this._isWalking) { return; }
         switch (this.direction) {
         case DIRECTION.N:
             if (this.position.y + this.top >= this.yMin) {
@@ -113,6 +112,7 @@ export class User extends Sprite {
             }
             break;
         case DIRECTION.E:
+            this.scale.x = -this._settings.scale;
             if (this.position.x + this.right <= this.xMax) {
                 this.x += this.speed;
             }
@@ -123,6 +123,7 @@ export class User extends Sprite {
             }
             break;
         case DIRECTION.W:
+            this.scale.x = this._settings.scale;
             if (this.position.x + this.left >= this.xMin) {
                 this.x -= this.speed;
             }
@@ -136,4 +137,5 @@ export interface CatSettings
     walkingFrames: string[];
     sitting: string,
     walkingSpeed: number;
+    scale: number
 }

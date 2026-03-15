@@ -33,7 +33,7 @@ export class MainScreen extends Container {
         this.addChild(this.mainContainer);
         // const asset = async () => await Assets.load("cat_walk.png")
         // this.addChild(asset)
-        this.user = new User({walkingFrames: ["cat_walk.png", "cat_walk2.png"], sitting: "cat.png", walkingSpeed: 3})
+        this.user = new User({scale: 0.25, walkingFrames: ["cat_walk.png", "cat_walk2.png"], sitting: "cat.png", walkingSpeed: 3})
         this.mainContainer.addChild(this.user);
         this.bouncer = new Bouncer();
 
