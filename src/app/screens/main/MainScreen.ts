@@ -117,7 +117,7 @@ export class MainScreen extends Container {
 
         this.mainContainer.x = centerX;
         this.mainContainer.y = centerY;
-        this.backgroundFill.rect(-width/2, -height/2, width, height).fill({color: '#3e2320'})
+        this.backgroundFill.rect(-width/2, -height/2, width, height).fill({color: '#431915'})
 
         this.pauseButton.x = 30;
         this.pauseButton.y = 30;

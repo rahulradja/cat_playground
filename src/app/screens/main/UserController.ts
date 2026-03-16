@@ -1,20 +1,9 @@
 import { Texture, Sprite } from "pixi.js"
-
-import {
-    randomInt,
-} from "../../../engine/utils/random";
-
-export enum DIRECTION {
-    N,
-    E,
-    S,
-    W,
-}
+import { KeyboardInput } from "../../controllers/KeyboardInput";
 
 export class User extends Sprite {
-    public direction!: DIRECTION;
     public speed!: number;
-
+    private keyboardInput: KeyboardInput;
     private yMin = -400;
     private yMax = 400;
     private xMin = -400;
@@ -46,41 +35,17 @@ export class User extends Sprite {
         if (val) { this.startWalking() }
         else { this.stopWalking() }
     }
-    private _currentFrame: number = 0
+    private _currentFrame: number = 0;
 
         
     constructor(protected _settings: CatSettings) {
         super({ texture: Texture.from(_settings.sitting), anchor: 0.5, scale: _settings.scale });
-        this.direction = randomInt(0, 3);
         this.speed = this._settings.walkingSpeed
-        window.addEventListener("keydown", (e) => {
-            this.isWalking = true
-            switch (e.key) {
-            case "ArrowUp":
-                this.direction = DIRECTION.N;
-                break;
-            case "ArrowDown":
-                this.direction = DIRECTION.S;
-                break;
-            case "ArrowLeft":
-                this.direction = DIRECTION.W;
-                break;
-            case "ArrowRight":
-                this.direction = DIRECTION.E;
-                break;
-            }
-            console.log(DIRECTION[this.direction]);
-        });
-        window.addEventListener("keyup", (e) => {
-            switch (e.key) {
-            case "ArrowUp":
-            case "ArrowDown":
-            case "ArrowLeft":
-            case "ArrowRight":
-                this.isWalking = false;
-            }
-            console.log(DIRECTION[this.direction]);
-        });
+        this.keyboardInput = new KeyboardInput();
+        this.keyboardInput.trackKey("ArrowUp");
+        this.keyboardInput.trackKey("ArrowDown");
+        this.keyboardInput.trackKey("ArrowLeft");
+        this.keyboardInput.trackKey("ArrowRight");
     }
     
     public async startWalking()
@@ -88,7 +53,7 @@ export class User extends Sprite {
         while (this.isWalking)
         {
             this._currentFrame = (this._currentFrame + 1) % this._settings.walkingFrames.length;
-            this.texture  = Texture.from(this._settings.walkingFrames[this._currentFrame]);
+            this.setTexture(this._settings.walkingFrames[this._currentFrame]);
             await new Promise(resolve => setTimeout(resolve, 500));
         }
     }
@@ -97,12 +62,10 @@ export class User extends Sprite {
     {
         await new Promise(resolve => setTimeout(resolve, 1000));
         this.texture  = Texture.from(this._settings.sitting);
-
     }
 
-
     public update(): void {
-        this.setDirection();
+        this.move();
     }
 
     public resize(w: number, h: number): void {
@@ -112,31 +75,28 @@ export class User extends Sprite {
         this.yMax = h / 2;
     }
 
-    private setDirection(): void {
-        if (!this._isWalking) { return; }
-        switch (this.direction) {
-        case DIRECTION.N:
-            if (this.position.y + this.top >= this.yMin) {
-                this.y -= this.speed;
-            }
-            break;
-        case DIRECTION.E:
+    private setTexture(asset: string)
+    {
+        this.texture  = Texture.from(asset);
+    }
+
+    private move(): void {
+        this.isWalking = this.keyboardInput.pressedKeys.length > 0
+        if (this.keyboardInput.isKeyPressed("ArrowUp") && this.position.y + this.top >= this.yMin) {
+            this.y -= this.speed;
+        }
+        if (this.keyboardInput.isKeyPressed("ArrowRight") && this.position.x + this.right <= this.xMax) {
+
             this.scale.x = -this._settings.scale;
-            if (this.position.x + this.right <= this.xMax) {
-                this.x += this.speed;
-            }
-            break;
-        case DIRECTION.S:
-            if (this.position.y + this.bottom <= this.yMax) {
-                this.y += this.speed;
-            }
-            break;
-        case DIRECTION.W:
+            this.x += this.speed;
+        }
+        if (this.keyboardInput.isKeyPressed("ArrowDown") && this.position.y + this.bottom <= this.yMax) {
+            this.y += this.speed;
+        }
+
+        if (this.keyboardInput.isKeyPressed("ArrowLeft") && this.position.x + this.left >= this.xMin) {
             this.scale.x = this._settings.scale;
-            if (this.position.x + this.left >= this.xMin) {
-                this.x -= this.speed;
-            }
-            break;
+            this.x -= this.speed;
         }
     }
 }
