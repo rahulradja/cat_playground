@@ -2,7 +2,7 @@ import { FancyButton } from "@pixi/ui";
 import { animate } from "motion";
 import type { AnimationPlaybackControls } from "motion/react";
 import type { Ticker } from "pixi.js";
-import { Container } from "pixi.js";
+import { Container, Graphics } from "pixi.js";
 
 import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
@@ -16,6 +16,7 @@ export class MainScreen extends Container {
     public static assetBundles = ["main"];
 
     public mainContainer: Container;
+    private backgroundFill: Graphics;
     private pauseButton: FancyButton;
     private settingsButton: FancyButton;
     private user: User;
@@ -25,6 +26,8 @@ export class MainScreen extends Container {
         super();
 
         this.mainContainer = new Container();
+        this.backgroundFill = new Graphics();
+        this.mainContainer.addChild(this.backgroundFill)
         this.addChild(this.mainContainer);
         // const asset = async () => await Assets.load("cat_walk.png")
         // this.addChild(asset)
@@ -114,6 +117,8 @@ export class MainScreen extends Container {
 
         this.mainContainer.x = centerX;
         this.mainContainer.y = centerY;
+        this.backgroundFill.rect(-width/2, -height/2, width, height).fill({color: '#3e2320'})
+
         this.pauseButton.x = 30;
         this.pauseButton.y = 30;
         this.settingsButton.x = width - 30
