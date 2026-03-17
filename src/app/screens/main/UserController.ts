@@ -33,14 +33,12 @@ export class User extends Container {
     private _sittingSprite: Sprite;
     private _sleepingSprite: Sprite;
 
+    private _nextStatePromise: { resolve: (success: boolean) => void, reject:(reason?: any) => void } | undefined;
+
     constructor(protected _settings: CatSettings) {
         super();
         this.speed = this._settings.walkingSpeed
-        this.keyboardInput = new KeyboardInput();
-        this.keyboardInput.trackKey("ArrowUp");
-        this.keyboardInput.trackKey("ArrowDown");
-        this.keyboardInput.trackKey("ArrowLeft");
-        this.keyboardInput.trackKey("ArrowRight");
+        this.keyboardInput = this.registerKeyboardInput()
         this._walkingSprite = this.createWalkingSprite();
         this._sittingSprite = new Sprite({scale: _settings.scale, texture: Texture.from(_settings.sitting)});
         this._sleepingSprite = new Sprite({scale: _settings.scale, texture: Texture.from(_settings.sleeping)});
@@ -62,10 +60,21 @@ export class User extends Container {
         this.yMax = h / 2;
     }
 
+    private registerKeyboardInput(): KeyboardInput
+    {
+        const keyboardInput = new KeyboardInput();
+        keyboardInput.trackKey("ArrowUp");
+        keyboardInput.trackKey("ArrowDown");
+        keyboardInput.trackKey("ArrowLeft");
+        keyboardInput.trackKey("ArrowRight");
+        return keyboardInput;
+    }
+
     private setCatState(newState: CatState)
     {
         if (newState === this._catState) { return; }
         this._catState = newState;
+        this._nextStatePromise?.resolve(false);
         this._sittingSprite.visible = newState === CatState.Sitting;
         this._walkingSprite.visible = newState === CatState.Walking || newState === CatState.Standing;
         this._sleepingSprite.visible = newState === CatState.Sleeping;
@@ -76,12 +85,25 @@ export class User extends Container {
         else { this._walkingSprite.stop() }
         if (newState === CatState.Standing)
         {
-            setTimeout(() => this.setCatState(CatState.Sitting), 2000)
+            this.nextStateTimeout(CatState.Sitting, 2000)
         }
         else if (newState === CatState.Sitting)
         {
-            setTimeout(() => this.setCatState(CatState.Sleeping), 5000)
+            this.nextStateTimeout(CatState.Sleeping, 5000)
         }
+    }
+
+    /**Goes to next state after a specified timeout */
+    private async nextStateTimeout(nextState: CatState, time: number): Promise<void>
+    {
+        const statePromise = new Promise<boolean>((resolve, reject) => 
+        {
+            this._nextStatePromise = { resolve, reject }
+            setTimeout(() => resolve(true), time)
+        })
+        statePromise.then((val) => {
+            if (val) { this.setCatState(nextState) }
+        })
     }
 
     private createWalkingSprite(): AnimatedSprite
