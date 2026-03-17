@@ -1,5 +1,5 @@
-import { ColorSource, ContainerOptions, Graphics } from "pixi.js";
-import { BoundedContainer } from "./BoundedContainer";
+import { ColorSource, Graphics } from "pixi.js";
+import { BoundedContainer, BoundedContainerSettings } from "./BoundedContainer";
 
 export class Background<TSettings extends BackgroundSettings = BackgroundSettings> extends BoundedContainer<TSettings>
 {
@@ -27,7 +27,7 @@ export class Background<TSettings extends BackgroundSettings = BackgroundSetting
     }
 }
 
-export interface BackgroundSettings extends ContainerOptions
+export interface BackgroundSettings extends BoundedContainerSettings
 {
     fill: ColorSource
 }

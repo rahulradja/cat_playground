@@ -1,6 +1,5 @@
 import { Texture, AnimatedSprite, AnimatedSpriteFrames, Sprite } from "pixi.js"
 import { KeyboardInput } from "../../controllers/KeyboardInput"
-import { ResizableContainer } from "../../displayElements/ResizableContainer";
 import { BoundedContainer } from "../../displayElements/BoundedContainer";
 
 export enum CatState { Walking, Standing, Sitting, Sleeping }
@@ -8,10 +7,6 @@ export enum CatState { Walking, Standing, Sitting, Sleeping }
 export class CatController extends BoundedContainer<CatSettings> {
     public speed!: number;
     private keyboardInput: KeyboardInput;
-    private yMin = -400;
-    private yMax = 400;
-    private xMin = -400;
-    private xMax = 400;
 
     get left() {
         return -this.width * 0.5;
@@ -53,13 +48,6 @@ export class CatController extends BoundedContainer<CatSettings> {
 
     public update(parent: BoundedContainer): void {
         this.move(parent);
-    }
-
-    public resize(w: number, h: number): void {
-        this.xMin = -w / 2;
-        this.xMax = w / 2;
-        this.yMin = -h / 2;
-        this.yMax = h / 2;
     }
 
     private registerKeyboardInput(): KeyboardInput

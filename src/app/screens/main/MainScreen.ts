@@ -116,8 +116,6 @@ export class MainScreen extends Container  {
         this.pauseButton.y = 30;
         this.settingsButton.x = width - 30
         this.settingsButton.y = 30;
-
-        this.cat.resize(width, height)
     }
 
     /** Show screen with animations */
@@ -161,7 +159,17 @@ export interface MainScreenSettings extends ContainerOptions
 
 export const DefaultMainScreenSettings: MainScreenSettings = 
 {
-    floor: {fill: "#aa9f94", position: { x: 0, y: 0}},
+    floor: 
+    {
+        fill: "#aa9f94", 
+        moveChildCheck: (child, newChildPos, currentSize, currentPos) => {
+            const isWithinLeft = newChildPos.x - child.width/2 >= currentPos.x 
+            const isWithinRight = newChildPos.x + child.width/2 <= currentSize.width + currentPos.x
+            const isWithinTop = newChildPos.y + child.height/2 >= currentPos.y
+            const isWithinBottom = newChildPos.y + child.height/2 <= currentSize.height + currentPos.y
+            return isWithinLeft && isWithinRight && isWithinBottom && isWithinTop;
+        }
+    },
     cat: 
     {
         scale: 2, 
