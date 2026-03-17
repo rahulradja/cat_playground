@@ -11,7 +11,6 @@ import { SettingsPopup } from "../../popups/SettingsPopup";
 import { CatController, CatSettings } from "./CatController.ts"
 // import { Floor } from "../../displayElements/Floor.ts";
 import { Background, BackgroundSettings } from "../../displayElements/Background.ts";
-import { ResizableContainer } from "../../displayElements/ResizableContainer.ts";
 import { BoundedContainer } from "../../displayElements/BoundedContainer.ts";
 
 /** The screen that holds the app */
@@ -20,8 +19,8 @@ export class MainScreen extends Container  {
     public static assetBundles = ["main"];
 
     public mainContainer: BoundedContainer;
-    // public floor: Floor;
-    private backgroundFill: Background;
+    public floor: Background;
+    private wall: Background;
     private pauseButton: FancyButton;
     private settingsButton: FancyButton;
     private cat: CatController;
@@ -32,11 +31,13 @@ export class MainScreen extends Container  {
         super();
 
         this.mainContainer = new BoundedContainer({});
-        // this.floor = new Floor(this._settings.floor)
-        this.backgroundFill = new Background({fill: '#431915'})
-        this.mainContainer.addChild(this.backgroundFill)
         this.addChild(this.mainContainer);
+        this.wall = new Background({fill: '#431915'})
+        this.mainContainer.addChild(this.wall)
+        this.floor = new Background(this._settings.floor)
+        this.mainContainer.addChild(this.floor)
         this.cat = new CatController(this._settings.cat)
+        this.cat.y = this.cat.height/2
         this.mainContainer.addChild(this.cat);
 
         const buttonAnimations = {
@@ -81,7 +82,7 @@ export class MainScreen extends Container  {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public update(_time: Ticker) {
         if (this.paused) return;
-        this.cat.update(this.mainContainer);
+        this.cat.update(this.floor);
     }
 
     /** Pause gameplay - automatically fired when a popup is presented */
@@ -106,8 +107,10 @@ export class MainScreen extends Container  {
 
         this.mainContainer.x = centerX;
         this.mainContainer.y = centerY;
-        // this.floor.resize(width, height)
-        this.backgroundFill.resize(width, height)
+        const floorFraction = 0.65
+        this.floor.resize(width, height * floorFraction)
+        this.floor.y = -height * (floorFraction - 0.5)
+        this.wall.resize(width, height)
 
         this.pauseButton.x = 30;
         this.pauseButton.y = 30;
@@ -158,7 +161,7 @@ export interface MainScreenSettings extends ContainerOptions
 
 export const DefaultMainScreenSettings: MainScreenSettings = 
 {
-    floor: {fill: "#aa9f94"},
+    floor: {fill: "#aa9f94", position: { x: 0, y: 0}},
     cat: 
     {
         scale: 2, 

@@ -9,8 +9,12 @@ export class BoundedContainer<TSettings extends BoundedContainerSettings = Bound
         {
             return this.canMoveChildTo(child, newX, newY);
         }
-        return (newX - child.width/2 >= -this.width/2) && (newX + child.width/2 <= this.width/2)
-        && (newY - child.height/2 >= -this.height/2) && (newY + child.height/2 <= this.height/2)
+        const isWithinLeft = newX - child.width/2 >= this.x 
+        const isWithinRight = newX + child.width/2 <= this.width + this.x
+        const isWithinTop = newY - child.height/2 >= this.y
+        const isWithinBottom = newY + child.height/2 <= this.height + this.y
+        console.log(this.x, this.y, isWithinTop, isWithinBottom)
+        return isWithinLeft && isWithinRight && isWithinBottom && isWithinTop;
     }
 }
 
