@@ -1,9 +1,10 @@
-import { Texture, AnimatedSprite, AnimatedSpriteFrames, Container, Sprite } from "pixi.js"
+import { Texture, AnimatedSprite, AnimatedSpriteFrames, Sprite } from "pixi.js"
 import { KeyboardInput } from "../../controllers/KeyboardInput"
+import { ResizableContainer } from "../../displayElements/ResizableContainer";
 
 export enum CatState { Walking, Standing, Sitting, Sleeping }
 
-export class User extends Container {
+export class CatController extends ResizableContainer<CatSettings> {
     public speed!: number;
     private keyboardInput: KeyboardInput;
     private yMin = -400;
@@ -36,12 +37,12 @@ export class User extends Container {
     private _nextStatePromise: { resolve: (success: boolean) => void, reject:(reason?: any) => void } | undefined;
 
     constructor(protected _settings: CatSettings) {
-        super();
+        super(_settings);
         this.speed = this._settings.walkingSpeed
         this.keyboardInput = this.registerKeyboardInput()
         this._walkingSprite = this.createWalkingSprite();
-        this._sittingSprite = new Sprite({scale: _settings.scale, texture: Texture.from(_settings.sitting)});
-        this._sleepingSprite = new Sprite({scale: _settings.scale, texture: Texture.from(_settings.sleeping)});
+        this._sittingSprite = new Sprite({texture: Texture.from(_settings.sitting)});
+        this._sleepingSprite = new Sprite({texture: Texture.from(_settings.sleeping)});
         this.addChild(this._sittingSprite);
         this.addChild(this._sleepingSprite);
         this._sittingSprite.position = { x: -this._sittingSprite.width/2, y: -this._sittingSprite.height/2}
@@ -109,7 +110,7 @@ export class User extends Container {
     private createWalkingSprite(): AnimatedSprite
     {
         const spriteFrame: AnimatedSpriteFrames = this._settings.walkingFrames.map((frame) => Texture.from(frame))
-        const walkingSprite = new AnimatedSprite({textures: spriteFrame, animationSpeed: 0.05, loop: true, scale: this._settings.scale});
+        const walkingSprite = new AnimatedSprite({textures: spriteFrame, animationSpeed: 0.05, loop: true});
         walkingSprite.play();
         this.addChild(walkingSprite);
         walkingSprite.position = {x: -walkingSprite.width/2, y: -walkingSprite.height/2}
@@ -126,7 +127,7 @@ export class User extends Container {
             this.y -= this.speed;
         }
         if (this.keyboardInput.isKeyPressed("ArrowRight") && this.position.x + this.right <= this.xMax) {
-            this.scale.x = -1;
+            this.scale.x = -this._settings.scale;
             this.x += this.speed;
         }
         if (this.keyboardInput.isKeyPressed("ArrowDown") && this.position.y + this.bottom <= this.yMax) {
@@ -134,7 +135,7 @@ export class User extends Container {
         }
 
         if (this.keyboardInput.isKeyPressed("ArrowLeft") && this.position.x + this.left >= this.xMin) {
-            this.scale.x = 1;
+            this.scale.x = this._settings.scale;
             this.x -= this.speed;
         }
     }

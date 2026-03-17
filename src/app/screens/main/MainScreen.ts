@@ -1,38 +1,41 @@
 import { FancyButton } from "@pixi/ui";
 import { animate } from "motion";
 import type { AnimationPlaybackControls } from "motion/react";
-import type { Ticker } from "pixi.js";
-import { Container, Graphics } from "pixi.js";
+import type { ContainerOptions, Ticker } from "pixi.js";
+import { Container } from "pixi.js";
 
 import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
 import { SettingsPopup } from "../../popups/SettingsPopup";
 
-import { User } from "./UserController.ts"
+import { CatController, CatSettings } from "./CatController.ts"
+// import { Floor } from "../../displayElements/Floor.ts";
+import { Background, BackgroundSettings } from "../../displayElements/Background.ts";
 
 /** The screen that holds the app */
-export class MainScreen extends Container {
+export class MainScreen extends Container  {
     /** Assets bundles required by this screen */
     public static assetBundles = ["main"];
 
     public mainContainer: Container;
-    private backgroundFill: Graphics;
+    // public floor: Floor;
+    private backgroundFill: Background;
     private pauseButton: FancyButton;
     private settingsButton: FancyButton;
-    private user: User;
+    private cat: CatController;
+    private _settings: MainScreenSettings = DefaultMainScreenSettings;
     private paused = false;
 
     constructor() {
         super();
 
         this.mainContainer = new Container();
-        this.backgroundFill = new Graphics();
+        // this.floor = new Floor(this._settings.floor)
+        this.backgroundFill = new Background({fill: '#431915'})
         this.mainContainer.addChild(this.backgroundFill)
         this.addChild(this.mainContainer);
-        // const asset = async () => await Assets.load("cat_walk.png")
-        // this.addChild(asset)
-        this.user = new User({scale: 2, sleeping: "cat_sleep.svg", walkingFrames: ["cat_walk.svg", "cat_walk2.svg"], sitting: "cat_sit.svg", walkingSpeed: 3})
-        this.mainContainer.addChild(this.user);
+        this.cat = new CatController(this._settings.cat)
+        this.mainContainer.addChild(this.cat);
 
         const buttonAnimations = {
             hover: {
@@ -67,22 +70,6 @@ export class MainScreen extends Container {
             engine().navigation.presentPopup(SettingsPopup),
         );
         this.addChild(this.settingsButton);
-
-        // this.addButton = new Button({
-        //     text: "Add",
-        //     width: 175,
-        //     height: 110,
-        // });
-        // this.addButton.onPress.connect(() => this.bouncer.add());
-        // this.addChild(this.addButton);
-
-        // this.removeButton = new Button({
-        //     text: "Remove",
-        //     width: 175,
-        //     height: 110,
-        // });
-        // this.removeButton.onPress.connect(() => this.bouncer.remove());
-        // this.addChild(this.removeButton);
     }
 
     /** Prepare the screen just before showing */
@@ -92,7 +79,7 @@ export class MainScreen extends Container {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public update(_time: Ticker) {
         if (this.paused) return;
-        this.user.update();
+        this.cat.update();
     }
 
     /** Pause gameplay - automatically fired when a popup is presented */
@@ -117,14 +104,15 @@ export class MainScreen extends Container {
 
         this.mainContainer.x = centerX;
         this.mainContainer.y = centerY;
-        this.backgroundFill.rect(-width/2, -height/2, width, height).fill({color: '#431915'})
+        // this.floor.resize(width, height)
+        this.backgroundFill.resize(width, height)
 
         this.pauseButton.x = 30;
         this.pauseButton.y = 30;
         this.settingsButton.x = width - 30
         this.settingsButton.y = 30;
 
-        this.user.resize(width, height)
+        this.cat.resize(width, height)
     }
 
     /** Show screen with animations */
@@ -157,5 +145,24 @@ export class MainScreen extends Container {
         if (!engine().navigation.currentPopup) {
             engine().navigation.presentPopup(PausePopup);
         }
+    }
+}
+
+export interface MainScreenSettings extends ContainerOptions
+{
+    cat: CatSettings;
+    floor: BackgroundSettings;
+}
+
+export const DefaultMainScreenSettings: MainScreenSettings = 
+{
+    floor: {fill: "#aa9f94"},
+    cat: 
+    {
+        scale: 2, 
+        sleeping: "cat_sleep.svg", 
+        walkingFrames: ["cat_walk.svg", "cat_walk2.svg"], 
+        sitting: "cat_sit.svg", 
+        walkingSpeed: 3
     }
 }
