@@ -3,10 +3,11 @@ import * as PIXI from "pixi.js"
 import { KeyboardInput } from "../../controllers/KeyboardInput"
 import { BoundedContainer } from "../../displayElements/BoundedContainer";
 import { BlendMode } from "@esotericsoftware/spine-pixi-v8";
+import { ICatController } from "../../controllers/CatController";
 
 export enum CatState { Walking, Standing, Sitting, Sleeping }
 
-export class CatController extends BoundedContainer<CatSettings> {
+export class Cat extends BoundedContainer<CatSettings> {
     public speed!: number;
     private keyboardInput: KeyboardInput;
 
@@ -34,7 +35,7 @@ export class CatController extends BoundedContainer<CatSettings> {
 
     private _nextStatePromise: { resolve: (success: boolean) => void, reject:(reason?: any) => void } | undefined;
 
-    constructor(protected _settings: CatSettings) {
+    constructor(protected _settings: CatSettings, private _catController: ICatController) {
         super(_settings);
         this.speed = this._settings.walkingSpeed
         this.keyboardInput = this.registerKeyboardInput()
@@ -125,18 +126,18 @@ export class CatController extends BoundedContainer<CatSettings> {
             this.setCatState(CatState.Walking)
         }
         else if (this._catState === CatState.Walking) { this.setCatState(CatState.Standing)}
-        if (this.keyboardInput.isKeyPressed("ArrowUp") && parent.canMoveChildTo(this, this.x, this.y - this.speed)) {
+        if (this._catController.isGoingUp && parent.canMoveChildTo(this, this.x, this.y - this.speed)) {
             this.y -= this.speed;
         }
-        if (this.keyboardInput.isKeyPressed("ArrowRight") && parent.canMoveChildTo(this, this.x + this.speed, this.y)) {
+        if (this._catController.isGoingRight && parent.canMoveChildTo(this, this.x + this.speed, this.y)) {
             this.scale.x = -this._settings.scale;
             this.x += this.speed;
         }
-        if (this.keyboardInput.isKeyPressed("ArrowDown") && parent.canMoveChildTo(this, this.x, this.y + this.speed)) {
+        if (this._catController.isGoingDown && parent.canMoveChildTo(this, this.x, this.y + this.speed)) {
             this.y += this.speed;
         }
 
-        if (this.keyboardInput.isKeyPressed("ArrowLeft") && parent.canMoveChildTo(this, this.x - this.speed, this.y)) {
+        if (this._catController.isGoingLeft && parent.canMoveChildTo(this, this.x - this.speed, this.y)) {
             this.scale.x = this._settings.scale;
             this.x -= this.speed;
         }

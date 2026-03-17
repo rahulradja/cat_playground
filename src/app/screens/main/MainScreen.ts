@@ -8,10 +8,11 @@ import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
 import { SettingsPopup } from "../../popups/SettingsPopup";
 
-import { CatController, CatSettings } from "./CatController.ts"
+import { Cat, CatSettings } from "./Cat.ts"
 // import { Floor } from "../../displayElements/Floor.ts";
 import { Background, BackgroundSettings } from "../../displayElements/Background.ts";
 import { BoundedContainer } from "../../displayElements/BoundedContainer.ts";
+import { CatKeyboardController } from "../../controllers/CatController.ts";
 
 /** The screen that holds the app */
 export class MainScreen extends Container  {
@@ -23,7 +24,7 @@ export class MainScreen extends Container  {
     private wall: Background;
     private pauseButton: FancyButton;
     private settingsButton: FancyButton;
-    private cat: CatController;
+    private cat: Cat;
     private _settings: MainScreenSettings = DefaultMainScreenSettings;
     private paused = false;
 
@@ -36,7 +37,7 @@ export class MainScreen extends Container  {
         this.mainContainer.addChild(this.wall)
         this.floor = new Background(this._settings.floor)
         this.mainContainer.addChild(this.floor)
-        this.cat = new CatController(this._settings.cat)
+        this.cat = new Cat(this._settings.cat, new CatKeyboardController())
         this.cat.y = this.cat.height/2
         this.mainContainer.addChild(this.cat);
 
