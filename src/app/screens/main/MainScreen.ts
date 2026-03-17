@@ -2,7 +2,7 @@ import { FancyButton } from "@pixi/ui";
 import { animate } from "motion";
 import type { AnimationPlaybackControls } from "motion/react";
 import type { ContainerOptions, Ticker } from "pixi.js";
-import { Container, FillGradient } from "pixi.js";
+import { Container, FillGradient, Matrix } from "pixi.js";
 
 import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
@@ -40,7 +40,7 @@ export class MainScreen extends Container  {
         this.cat = new Cat(this._settings.cat, new CatKeyboardController())
         this.cat.y = this.cat.height/2
         this.mainContainer.addChild(this.cat);
-
+        
         const buttonAnimations = {
             hover: {
                 props: {
@@ -111,7 +111,8 @@ export class MainScreen extends Container  {
         const floorFraction = 0.65
         this.floor.resize(width, height * floorFraction)
         this.floor.y = -height * (floorFraction - 0.5)
-        this.wall.resize(width, height)
+        this.wall.resize(width, height * (1 - floorFraction))
+        this.wall.y = -height/2
 
         this.pauseButton.x = 30;
         this.pauseButton.y = 30;
@@ -163,8 +164,8 @@ const floorGradient: FillGradient = new FillGradient({
     type: 'linear',
     colorStops: 
     [
-        { offset: 0, color: "#69564d", }, 
-        { offset: 0.2, color: "#aa9f94", }  
+        { offset: 0, color: "#14100e" } , 
+        { offset: 0.2, color: "#312722" }
     ],
     
 
@@ -172,8 +173,9 @@ const floorGradient: FillGradient = new FillGradient({
 
 const wallGradient: FillGradient = new FillGradient({type: 'linear',
     colorStops: [
-        { offset: 0, color: "#d66b44", }, 
-        { offset: 0.3, color: "#d4ac85", }  
+        { offset: 0, color: "#d66b44" }, 
+        { offset: 0.3, color: "#d4ac85" },
+        { offset: 1, color: "#9b7368" },
     ]
 })
 
@@ -181,11 +183,24 @@ export const DefaultMainScreenSettings: MainScreenSettings =
 {
     wall:
     {
-        fill: wallGradient
+        fill: wallGradient,
+        pattern: 
+        {
+            blendMode: "multiply", 
+            source: "tile_texture.jpg", 
+            repeat: "repeat", 
+            transform: new Matrix().scale(0.2, 0.2)
+        },
     },
     floor: 
     {
-        fill: floorGradient,
+        fill: floorGradient, 
+        pattern: {
+            source: "herringbone_texture.jpg", 
+            transform: new Matrix().rotate(Math.PI/6).scale(0.6, 0.2),
+            repeat: "repeat",
+            blendMode: "add"
+        },
         moveChildCheck: (child, newChildPos, currentSize, currentPos) => {
             const isWithinLeft = newChildPos.x - child.width/2 >= currentPos.x 
             const isWithinRight = newChildPos.x + child.width/2 <= currentSize.width + currentPos.x
