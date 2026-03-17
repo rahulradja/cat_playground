@@ -211,7 +211,7 @@ export const DefaultMainScreenSettings: MainScreenSettings =
     },
     cat: 
     {
-        scale: 2, 
+        scale: 1.2,
         sleeping: "cat_sleep.svg", 
         walkingFrames: ["cat_walk.svg", "cat_walk2.svg"], 
         sitting: "cat_sit.svg", 

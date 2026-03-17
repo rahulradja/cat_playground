@@ -90,11 +90,10 @@ export class Cat extends BoundedContainer<CatSettings> {
     private drawShadow()
     {
         const shadow = new Graphics();
-        shadow.alpha = 0.7
         shadow.blendMode = 'multiply'
-        shadow.ellipse(0, 40, this.width/4, 10).fill("#22213f")
+        shadow.ellipse(0, 70, 80, 5).fill("#22213f")
         this.addChildAt(shadow, 0)
-        shadow.filters = new PIXI.BlurFilter({strength: 10, quality: 5, resolution: 5, kernelSize: 5}) 
+        shadow.filters = new PIXI.BlurFilter({strength: 5, quality: 5, resolution: 3, kernelSize: 5}) 
     }
 
     /**Goes to next state after a specified timeout */
