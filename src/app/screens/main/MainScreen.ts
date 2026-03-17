@@ -11,13 +11,15 @@ import { SettingsPopup } from "../../popups/SettingsPopup";
 import { CatController, CatSettings } from "./CatController.ts"
 // import { Floor } from "../../displayElements/Floor.ts";
 import { Background, BackgroundSettings } from "../../displayElements/Background.ts";
+import { ResizableContainer } from "../../displayElements/ResizableContainer.ts";
+import { BoundedContainer } from "../../displayElements/BoundedContainer.ts";
 
 /** The screen that holds the app */
 export class MainScreen extends Container  {
     /** Assets bundles required by this screen */
     public static assetBundles = ["main"];
 
-    public mainContainer: Container;
+    public mainContainer: BoundedContainer;
     // public floor: Floor;
     private backgroundFill: Background;
     private pauseButton: FancyButton;
@@ -29,7 +31,7 @@ export class MainScreen extends Container  {
     constructor() {
         super();
 
-        this.mainContainer = new Container();
+        this.mainContainer = new BoundedContainer({});
         // this.floor = new Floor(this._settings.floor)
         this.backgroundFill = new Background({fill: '#431915'})
         this.mainContainer.addChild(this.backgroundFill)
@@ -79,7 +81,7 @@ export class MainScreen extends Container  {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public update(_time: Ticker) {
         if (this.paused) return;
-        this.cat.update();
+        this.cat.update(this.mainContainer);
     }
 
     /** Pause gameplay - automatically fired when a popup is presented */

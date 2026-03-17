@@ -1,10 +1,11 @@
 import { Texture, AnimatedSprite, AnimatedSpriteFrames, Sprite } from "pixi.js"
 import { KeyboardInput } from "../../controllers/KeyboardInput"
 import { ResizableContainer } from "../../displayElements/ResizableContainer";
+import { BoundedContainer } from "../../displayElements/BoundedContainer";
 
 export enum CatState { Walking, Standing, Sitting, Sleeping }
 
-export class CatController extends ResizableContainer<CatSettings> {
+export class CatController extends BoundedContainer<CatSettings> {
     public speed!: number;
     private keyboardInput: KeyboardInput;
     private yMin = -400;
@@ -50,8 +51,8 @@ export class CatController extends ResizableContainer<CatSettings> {
         this.setCatState(CatState.Sitting);
     }
 
-    public update(): void {
-        this.move();
+    public update(parent: BoundedContainer): void {
+        this.move(parent);
     }
 
     public resize(w: number, h: number): void {
@@ -117,24 +118,24 @@ export class CatController extends ResizableContainer<CatSettings> {
         return walkingSprite;
     }
 
-    private move(): void {
+    private move(parent: BoundedContainer): void {
         if (this.keyboardInput.pressedKeys.length > 0)
         {
             this.setCatState(CatState.Walking)
         }
         else if (this._catState === CatState.Walking) { this.setCatState(CatState.Standing)}
-        if (this.keyboardInput.isKeyPressed("ArrowUp") && this.position.y + this.top >= this.yMin) {
+        if (this.keyboardInput.isKeyPressed("ArrowUp") && parent.canMoveChildTo(this, this.x, this.y - this.speed)) {
             this.y -= this.speed;
         }
-        if (this.keyboardInput.isKeyPressed("ArrowRight") && this.position.x + this.right <= this.xMax) {
+        if (this.keyboardInput.isKeyPressed("ArrowRight") && parent.canMoveChildTo(this, this.x + this.speed, this.y)) {
             this.scale.x = -this._settings.scale;
             this.x += this.speed;
         }
-        if (this.keyboardInput.isKeyPressed("ArrowDown") && this.position.y + this.bottom <= this.yMax) {
+        if (this.keyboardInput.isKeyPressed("ArrowDown") && parent.canMoveChildTo(this, this.x, this.y + this.speed)) {
             this.y += this.speed;
         }
 
-        if (this.keyboardInput.isKeyPressed("ArrowLeft") && this.position.x + this.left >= this.xMin) {
+        if (this.keyboardInput.isKeyPressed("ArrowLeft") && parent.canMoveChildTo(this, this.x - this.speed, this.y)) {
             this.scale.x = this._settings.scale;
             this.x -= this.speed;
         }

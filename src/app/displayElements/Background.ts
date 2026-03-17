@@ -1,7 +1,7 @@
 import { ColorSource, ContainerOptions, Graphics } from "pixi.js";
-import { ResizableContainer } from "./ResizableContainer";
+import { BoundedContainer } from "./BoundedContainer";
 
-export class Background<TSettings extends BackgroundSettings = BackgroundSettings> extends ResizableContainer<TSettings>
+export class Background<TSettings extends BackgroundSettings = BackgroundSettings> extends BoundedContainer<TSettings>
 {
     private _fill: Graphics;
     constructor(protected _settings: TSettings)
