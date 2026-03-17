@@ -5,9 +5,9 @@ import { Label } from "./Label"
 export const BoxButtonSettings: UIBoxSettings =
 { 
     radius: 50, 
-    primaryColor: '#a5c6eb', 
-    border: { color: '#26265f', width: 10 }, 
-    secondaryColor: '#575dd6', 
+    primaryColor: "#d4ac85", 
+    border: { color: "#6b1000", width: 10 }, 
+    secondaryColor: "#d66b44", 
     size: { w: 300, h: 100 },
     backingOffset: { x: 5, y: 5 },
     graphicsPosition: { x: 5, y: 0 }

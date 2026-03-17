@@ -53,9 +53,9 @@ export interface UIBoxSettings
 export const DefaultUIBoxSettings: UIBoxSettings =
 { 
     radius: 50, 
-    primaryColor: '#a5c6eb', 
-    border: { color: '#26265f', width: 20 }, 
-    secondaryColor: '#575dd6', 
+    primaryColor: "#d4ac85", 
+    border: { color: "#6b1000", width: 20 }, 
+    secondaryColor: "#d66b44", 
     size: {w: 400, h: 400},
     backingOffset: { x: 10, y: 10 }
 }
