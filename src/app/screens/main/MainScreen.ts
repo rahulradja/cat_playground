@@ -31,7 +31,7 @@ export class MainScreen extends Container {
         this.addChild(this.mainContainer);
         // const asset = async () => await Assets.load("cat_walk.png")
         // this.addChild(asset)
-        this.user = new User({scale: 2, walkingFrames: ["cat_walk.svg", "cat_walk2.svg"], sitting: "cat_sit.svg", walkingSpeed: 3})
+        this.user = new User({scale: 2, sleeping: "cat_sleep.svg", walkingFrames: ["cat_walk.svg", "cat_walk2.svg"], sitting: "cat_sit.svg", walkingSpeed: 3})
         this.mainContainer.addChild(this.user);
 
         const buttonAnimations = {

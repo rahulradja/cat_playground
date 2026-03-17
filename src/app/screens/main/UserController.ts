@@ -1,7 +1,7 @@
-import { Texture, Sprite } from "pixi.js"
+import { Texture, AnimatedSprite, AnimatedSpriteFrames, Container } from "pixi.js"
 import { KeyboardInput } from "../../controllers/KeyboardInput";
 
-export class User extends Sprite {
+export class User extends Container {
     public speed!: number;
     private keyboardInput: KeyboardInput;
     private yMin = -400;
@@ -29,39 +29,27 @@ export class User extends Sprite {
     public get isWalking(): boolean { return this._isWalking }
     public set isWalking(val)
     {
-        const hasChangedValue = this._isWalking !== val
         this._isWalking = val;
-        if (!hasChangedValue){ return; }
-        if (val) { this.startWalking() }
-        else { this.stopWalking() }
+        if (!val) { this._walkingSprite.stop() }
+        else { this._walkingSprite.play()}
     }
-    private _currentFrame: number = 0;
 
-        
+    private _walkingSprite: AnimatedSprite;
+    private _sittingTexture: Texture;
+    private _sleepingTexture: Texture;
+
     constructor(protected _settings: CatSettings) {
-        super({ texture: Texture.from(_settings.sitting), anchor: 0.5, scale: _settings.scale });
+        super();
         this.speed = this._settings.walkingSpeed
         this.keyboardInput = new KeyboardInput();
         this.keyboardInput.trackKey("ArrowUp");
         this.keyboardInput.trackKey("ArrowDown");
         this.keyboardInput.trackKey("ArrowLeft");
         this.keyboardInput.trackKey("ArrowRight");
-    }
-    
-    public async startWalking()
-    {
-        while (this.isWalking)
-        {
-            this._currentFrame = (this._currentFrame + 1) % this._settings.walkingFrames.length;
-            this.setTexture(this._settings.walkingFrames[this._currentFrame]);
-            await new Promise(resolve => setTimeout(resolve, 500));
-        }
-    }
+        this._walkingSprite = this.createWalkingSprite();
+        this._sittingTexture = Texture.from(_settings.sitting);
+        this._sleepingTexture = Texture.from(_settings.sleeping)
 
-    public async stopWalking()
-    {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        this.texture  = Texture.from(this._settings.sitting);
     }
 
     public update(): void {
@@ -75,9 +63,14 @@ export class User extends Sprite {
         this.yMax = h / 2;
     }
 
-    private setTexture(asset: string)
+    private createWalkingSprite(): AnimatedSprite
     {
-        this.texture  = Texture.from(asset);
+        const spriteFrame: AnimatedSpriteFrames = this._settings.walkingFrames.map((frame) => Texture.from(frame))
+        const walkingSprite = new AnimatedSprite({textures: spriteFrame, animationSpeed: 0.05, loop: true, scale: this._settings.scale});
+        walkingSprite.play();
+        this.addChild(walkingSprite);
+        walkingSprite.position = {x: -walkingSprite.width/2, y: -walkingSprite.height/2}
+        return walkingSprite;
     }
 
     private move(): void {
@@ -86,8 +79,7 @@ export class User extends Sprite {
             this.y -= this.speed;
         }
         if (this.keyboardInput.isKeyPressed("ArrowRight") && this.position.x + this.right <= this.xMax) {
-
-            this.scale.x = -this._settings.scale;
+            this.scale.x = -1;
             this.x += this.speed;
         }
         if (this.keyboardInput.isKeyPressed("ArrowDown") && this.position.y + this.bottom <= this.yMax) {
@@ -95,7 +87,7 @@ export class User extends Sprite {
         }
 
         if (this.keyboardInput.isKeyPressed("ArrowLeft") && this.position.x + this.left >= this.xMin) {
-            this.scale.x = this._settings.scale;
+            this.scale.x = 1;
             this.x -= this.speed;
         }
     }
@@ -106,5 +98,6 @@ export interface CatSettings
     walkingFrames: string[];
     sitting: string,
     walkingSpeed: number;
+    sleeping: string;
     scale: number
 }
