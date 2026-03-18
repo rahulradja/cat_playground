@@ -38,8 +38,8 @@ export class Background<TSettings extends BackgroundSettings = BackgroundSetting
         this._pattern.clear()
         const texture: Texture = Texture.from(this._settings.pattern.source)
         const fillPattern =  new FillPattern(texture, this._settings.pattern.repeat || "repeat")
-        fillPattern.transform = new Matrix()
-        fillPattern.transform = this._settings.pattern.transform ?? new Matrix()
+        fillPattern.transform = new Matrix().scale(this.height/this.width, 1) // scale it to retain aspect ratio
+        if (this._settings.pattern.transform) {fillPattern.transform.append(this._settings.pattern.transform)}
         
         this._pattern.rect(0, 0, this.width, this.height)
         this._pattern.fill(fillPattern)
