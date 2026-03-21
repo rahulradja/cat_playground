@@ -13,6 +13,8 @@ import { Cat, CatSettings } from "./Cat.ts"
 import { Background, BackgroundSettings } from "../../displayElements/Background.ts";
 import { BoundedContainer } from "../../displayElements/BoundedContainer.ts";
 import { CatKeyboardController } from "../../controllers/CatController.ts";
+import { IdleController } from "../../controllers/IdleController.ts";
+import { randomNumberBetween } from "../../utils/TypeUtils.ts";
 
 /** The screen that holds the app */
 export class MainScreen extends Container  {
@@ -24,7 +26,7 @@ export class MainScreen extends Container  {
     private wall: Background;
     private pauseButton: FancyButton;
     private settingsButton: FancyButton;
-    private cat: Cat;
+    private cats: Cat[]=[];
     private _settings: MainScreenSettings = DefaultMainScreenSettings;
     private paused = false;
 
@@ -37,9 +39,15 @@ export class MainScreen extends Container  {
         this.mainContainer.addChild(this.wall)
         this.floor = new Background(this._settings.floor)
         this.mainContainer.addChild(this.floor)
-        this.cat = new Cat(this._settings.cat, new CatKeyboardController())
-        this.cat.y = this.cat.height/2
-        this.mainContainer.addChild(this.cat);
+        this.createCat(true)
+        this.createCat(false, "black")
+        this.createCat(false, "grey")
+        // this.cat = new Cat(this._settings.cat, new IdleController())
+        // this.cat.y = this.cat.height/2
+        // const cat = new Cat({...this._settings.cat, color: "preload/cat/black"}, new CatKeyboardController());
+        // cat.x = cat.y = this.cat.height/2
+        // this.mainContainer.addChild(cat);
+        // this.mainContainer.addChild(this.cat);
         
         const buttonAnimations = {
             hover: {
@@ -83,7 +91,7 @@ export class MainScreen extends Container  {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public update(_time: Ticker) {
         if (this.paused) return;
-        this.cat.update(this.floor);
+        this.cats.forEach((cat) => cat.update(this.floor));
     }
 
     /** Pause gameplay - automatically fired when a popup is presented */
@@ -149,6 +157,14 @@ export class MainScreen extends Container  {
         if (!engine().navigation.currentPopup) {
             engine().navigation.presentPopup(PausePopup);
         }
+    }
+
+    private createCat(isUserControlled: boolean = false, color: string = "orange")
+    {
+        const controller = isUserControlled ? new CatKeyboardController() : new IdleController();
+        const cat = new Cat({...this._settings.cat, color: "preload/cat/" + color}, controller)
+        this.mainContainer.addChild(cat);
+        this.cats.push(cat)
     }
 }
 

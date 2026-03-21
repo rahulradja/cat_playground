@@ -124,7 +124,7 @@ export class Cat extends BoundedContainer<CatSettings> {
     }
 
     private move(parent: BoundedContainer): void {
-        if (this.keyboardInput.pressedKeys.length > 0)
+        if (this._catController.activeDirections?.length > 0)
         {
             this.setCatState(CatState.Walking)
         }
