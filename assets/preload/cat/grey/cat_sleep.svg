@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1989 1216" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;">
+    <g transform="matrix(1,0,0,1,-32.465907,-22.368646)">
+        <g id="cat_sleep" transform="matrix(2.496056,0.07496,-0.07496,2.496056,-143.250888,-861.673307)">
+            <g transform="matrix(1,-0,0,1,0.000061,0)">
+                <path d="M222.31,477.66C208.77,491.2 167.17,533.81 196.49,709.76C210.03,790.95 281.86,843.14 341.2,805.67C347.99,801.38 371.6,772.46 371.6,772.46C371.6,772.46 384.51,804.19 409.49,814.14C434.01,823.91 470.27,812.13 504.41,787.16C510.54,782.68 583.22,750.61 682.77,783.8C698.38,789 807.26,777.12 820.74,750.14C834.14,723.36 883.8,691.81 852.71,581.88C830.82,504.43 770.71,457.41 709.69,440.54C635.49,420.03 536.38,430.45 526.29,433.81L222.31,477.66Z" style="fill:url(#_Radial1);stroke:black;stroke-width:21.02px;"/>
+                <path d="M484.66,798.52C519.57,764.41 558.11,693.37 548.6,647.45M425.77,724.85C395.94,724.48 377.23,741.1 369.66,774.7C368.33,742.1 359.88,724.25 313.03,716.44" style="fill:none;stroke:black;stroke-width:21.02px;"/>
+                <path d="M856.27,708.89C804.79,760.37 707.4,679.04 686.06,725.91C668.7,764.03 711.69,762.44 800.1,778.68C880.51,793.45 891.14,689.73 864.78,676.55L856.27,708.89Z" style="fill:url(#_Radial2);stroke:black;stroke-width:21.02px;"/>
+            </g>
+            <g transform="matrix(1,0,0,1,24.46706,205.876526)">
+                <path d="M253.03,165.88C211.46,184.76 184.09,230.06 162.24,268.45C140.38,306.85 119.64,363.17 121.88,396.24C123.88,425.77 152.01,449.11 175.69,466.86C201.47,486.2 247.99,501.05 276.57,512.26C299.51,521.26 327.3,532.16 347.19,534.12C363.71,535.75 380.76,530.7 395.96,524.03C423.42,511.98 484.79,479.47 511.98,461.82C529.94,450.15 551.29,438.06 559.06,418.1C566.9,397.92 564.7,365.91 559.06,340.75C551.77,308.25 538.88,254.44 515.34,223.05C491.8,191.67 457.03,160.98 417.81,152.43C374.1,142.9 295.63,146.55 253.03,165.88ZM496.84,196.15C514.59,186.06 550.09,165.88 574.19,162.52C596.83,159.36 633.88,160.84 641.45,175.97C649.01,191.11 629.96,231.46 619.59,253.32C609.98,273.58 589.6,295.36 579.23,307.13C573.16,314.02 562.64,320.63 557.37,323.94M124.71,322.59C113.35,306.26 90.62,273.59 82.05,248.18C73.69,223.38 61.3,185.04 73.32,170.14C85.34,155.24 130.64,156.54 154.17,158.77C175.83,160.83 201.65,175.97 214.55,183.54" style="fill:url(#_Radial3);stroke:black;stroke-width:21.02px;"/>
+                <path d="M339.65,406.64C342.95,412.62 347.02,416.99 359.52,420.07C367.58,415.47 371.01,411.81 375.37,402.74M323.72,467.34C328.12,474.32 338.62,475.1 346.09,473.95C359.98,471.79 361.74,463.34 363.11,448.32L360.42,423.79M363.12,448.63C364.35,461.1 374.95,469.18 384.42,470.6C392.54,470.35 398.99,467.44 403.77,461.85M225.35,385C229.48,386.64 260.06,398.88 280.88,385M431.21,377.28C435.32,379.33 459.57,391.46 488.42,372.23" style="fill:none;stroke:black;stroke-width:13.45px;"/>
+            </g>
+        </g>
+    </g>
+    <defs>
+        <radialGradient id="_Radial1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(338.260101,0,0,194.932175,523.265625,626.414062)"><stop offset="0" style="stop-color:#FFF1D7;stop-opacity:1"/><stop offset="0.01" style="stop-color:#FFF1D7;stop-opacity:1"/><stop offset="1" style="stop-color:rgb(54,47,36);stop-opacity:1"/></radialGradient>
+        <radialGradient id="_Radial2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(97.693474,0,0,51.782227,781.078125,728.925781)"><stop offset="0" style="stop-color:#FFF1D7;stop-opacity:1"/><stop offset="0.01" style="stop-color:#FFF1D7;stop-opacity:1"/><stop offset="1" style="stop-color:rgb(54,47,36);stop-opacity:1"/></radialGradient>
+        <radialGradient id="_Radial3" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="matrix(287.42569,0,0,193.52594,359.5625,333.074219)"><stop offset="0" style="stop-color:#FFF1D7;stop-opacity:1"/><stop offset="0.01" style="stop-color:#FFF1D7;stop-opacity:1"/><stop offset="1" style="stop-color:rgb(54,47,36);stop-opacity:1"/></radialGradient>
+    </defs>
+</svg>
