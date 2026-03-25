@@ -2,7 +2,7 @@ import { FancyButton } from "@pixi/ui";
 import { animate } from "motion";
 import type { AnimationPlaybackControls } from "motion/react";
 import type { ContainerOptions, Ticker } from "pixi.js";
-import { Container, FillGradient, Matrix } from "pixi.js";
+import { Container, FillGradient, Matrix, Sprite, Texture } from "pixi.js";
 
 import { engine } from "../../getEngine";
 import { PausePopup } from "../../popups/PausePopup";
@@ -24,6 +24,7 @@ export class MainScreen extends Container  {
     public mainContainer: BoundedContainer;
     public floor: Background;
     private wall: Background;
+    private logo!: Sprite
     private pauseButton: FancyButton;
     private settingsButton: FancyButton;
     private cats: Cat[]=[];
@@ -40,6 +41,11 @@ export class MainScreen extends Container  {
         this.mainContainer.addChild(this.wall)
         this.floor = new Background(this._settings.floor)
         this.mainContainer.addChild(this.floor)
+
+        this.logo =  new Sprite({texture: Texture.from("playground-logo.png")});
+        this.mainContainer.addChild(this.logo)
+        this.logo.scale = 0.3
+
         this.createCat(true)
 
         this.createIdleCats(5)
@@ -89,7 +95,7 @@ export class MainScreen extends Container  {
         this.cats.sort((catA, catB) => catA.y -catB.y)
         this.cats.forEach((cat) => 
         {
-            cat.parent?.addChildAt(cat, cat.parent.children.length -1)
+            cat.parent?.addChildAt(cat, cat.parent.children.length -2)
             cat.update(this.floor)
         });
     }
@@ -121,6 +127,9 @@ export class MainScreen extends Container  {
         this.floor.y = -height * (floorFraction - 0.5)
         this.wall.resize(width, height * (1 - floorFraction))
         this.wall.y = -height/2
+        this.logo.x = -this.logo.width/2
+        this.logo.y = height/2 - this.logo.height + 10
+        this.mainContainer.addChildAt(this.logo, this.mainContainer.children.length - 1)
 
         this.pauseButton.x = 30;
         this.pauseButton.y = 30;
@@ -240,7 +249,7 @@ export const DefaultMainScreenSettings: MainScreenSettings =
         moveChildCheck: (child, newChildPos, currentSize, currentPos) => {
             const isWithinLeft = newChildPos.x - child.width/2 >= currentPos.x 
             const isWithinRight = newChildPos.x + child.width/2 <= currentSize.width + currentPos.x
-            const isWithinTop = newChildPos.y + child.height/2 >= currentPos.y
+            const isWithinTop = newChildPos.y + child.height/2 >= currentPos.y + 30
             const isWithinBottom = newChildPos.y + child.height/2 <= currentSize.height + currentPos.y
             return isWithinLeft && isWithinRight && isWithinBottom && isWithinTop;
         }
