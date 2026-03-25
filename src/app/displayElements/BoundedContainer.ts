@@ -1,5 +1,6 @@
 import { ContainerSettings, ResizableContainer } from "./ResizableContainer";
 
+/** For containers that can move within the bounds of another container */
 export class BoundedContainer<TSettings extends ContainerSettings =ContainerSettings> extends ResizableContainer<TSettings>
 {
     public canMoveChildTo(child: ResizableContainer, newX: number, newY: number): boolean

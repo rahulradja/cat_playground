@@ -4,17 +4,18 @@ import type { AnimationPlaybackControls } from "motion/react";
 import type { ContainerOptions, Ticker } from "pixi.js";
 import { Container, FillGradient, Matrix, Sprite, Texture } from "pixi.js";
 
-import { engine } from "../../getEngine";
-import { PausePopup } from "../../popups/PausePopup";
-import { SettingsPopup } from "../../popups/SettingsPopup";
+import { engine } from "../getEngine.ts";
+import { PausePopup } from "../popups/PausePopup.ts";
+import { SettingsPopup } from "../popups/SettingsPopup.ts";
 
-import { Cat, CatSettings } from "./Cat.ts"
+import { Cat, CatSettings } from "../components/Cat.ts"
 // import { Floor } from "../../displayElements/Floor.ts";
-import { Background, BackgroundSettings } from "../../displayElements/Background.ts";
-import { BoundedContainer } from "../../displayElements/BoundedContainer.ts";
-import { CatKeyboardController } from "../../controllers/CatController.ts";
-import { IdleController } from "../../controllers/IdleController.ts";
-import { randomArrayElement } from "../../utils/TypeUtils.ts";
+import { Background, BackgroundSettings } from "../displayElements/Background.ts";
+import { BoundedContainer } from "../displayElements/BoundedContainer.ts";
+import { CatKeyboardController } from "../controllers/CatController.ts";
+import { IdleController } from "../controllers/IdleController.ts";
+import { randomArrayElement } from "../utils/TypeUtils.ts";
+import { Ball, BallSettings } from "../components/Ball.ts";
 
 /** The screen that holds the app */
 export class MainScreen extends Container  {
@@ -24,7 +25,8 @@ export class MainScreen extends Container  {
     public mainContainer: BoundedContainer;
     public floor: Background;
     private wall: Background;
-    private logo!: Sprite
+    private logo!: Sprite;
+    private ball!: Ball;
     private pauseButton: FancyButton;
     private settingsButton: FancyButton;
     private cats: Cat[]=[];
@@ -41,6 +43,8 @@ export class MainScreen extends Container  {
         this.mainContainer.addChild(this.wall)
         this.floor = new Background(this._settings.floor)
         this.mainContainer.addChild(this.floor)
+        this.ball = new Ball(this._settings.ball)
+        this.mainContainer.addChild(this.ball)
 
         this.logo =  new Sprite({texture: Texture.from("playground-logo.png")});
         this.mainContainer.addChild(this.logo)
@@ -202,6 +206,7 @@ export interface MainScreenSettings extends ContainerOptions
     cat: CatSettings;
     floor: BackgroundSettings;
     wall: BackgroundSettings;
+    ball: BallSettings;
 }
 
 const floorGradient: FillGradient = new FillGradient({
@@ -225,6 +230,11 @@ const wallGradient: FillGradient = new FillGradient({type: 'linear',
 
 export const DefaultMainScreenSettings: MainScreenSettings = 
 {
+    ball:
+    {
+        radius: 20,
+        color: "#ff7979"
+    },
     wall:
     {
         anchor: { x: 0.5, y: 0 },

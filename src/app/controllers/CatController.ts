@@ -1,4 +1,4 @@
-import { CatState } from "../screens/main/Cat";
+import { CatState } from "../components/Cat";
 import { KeyboardInput } from "./KeyboardInput";
 
 export abstract class ICatController

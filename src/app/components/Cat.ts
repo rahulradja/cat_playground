@@ -1,7 +1,7 @@
 import {  Texture, AnimatedSprite, AnimatedSpriteFrames, Sprite, Graphics } from "pixi.js"
 import * as PIXI from "pixi.js"
-import { BoundedContainer } from "../../displayElements/BoundedContainer";
-import { ICatController } from "../../controllers/CatController";
+import { BoundedContainer } from "../displayElements/BoundedContainer";
+import { ICatController } from "../controllers/CatController";
 
 export enum CatState { Walking, Standing, Sitting, Sleeping }
 

@@ -62,10 +62,10 @@ export class CreationResizePlugin {
        */
             {
                 set(dom: Window | HTMLElement) {
-                    globalThis.removeEventListener("resize", app.queueResize);
+                    globalThis.removeEventListener("resize", app.resize);
                     this._resizeTo = dom;
                     if (dom) {
-                        globalThis.addEventListener("resize", app.queueResize);
+                        globalThis.addEventListener("resize", app.resize);
                         app.resize();
                     }
                 },
