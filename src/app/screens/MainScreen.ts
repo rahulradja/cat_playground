@@ -238,7 +238,8 @@ export const DefaultMainScreenSettings: MainScreenSettings =
     ball:
     {
         radius: 20,
-        color: "#ff7979"
+        color: "#ff7979",
+        friction: 0.99
     },
     wall:
     {
