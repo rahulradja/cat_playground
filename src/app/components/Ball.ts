@@ -25,16 +25,16 @@ export class Ball<TSettings extends BallSettings = BallSettings> extends Resizab
         const mainContainer = this.parent
         mainContainer.eventMode = "dynamic"
         this._ballGraphics.eventMode = "dynamic";
-        this._ballGraphics.on("mousedown", () => this.startDragging())
+        this._ballGraphics.on("pointerdown", () => this.startDragging())
         this._ballGraphics.cursor = "pointer"
-        mainContainer.on("mousemove", (e) =>
+        mainContainer.on("pointermove", (e) =>
         {
             if (!this._isDragging || !this.parent) { return; }
             this.position = this.parent.toLocal(e.global)
             this.speed.x = e.movementX
             this.speed.y = e.movementY
         }) 
-        mainContainer.addEventListener("mouseup", () => this._isDragging = false)
+        mainContainer.addEventListener("pointerup", () => this._isDragging = false)
 
     }
 
