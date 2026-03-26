@@ -5,7 +5,7 @@ export class BasicEvent
 {
     private _handlers: {resolve: Callback, reject?: Callback}[] = []
 
-    public onChanged(resolve: Callback, reject?: Callback)
+    public on(resolve: Callback, reject?: Callback)
     {
         this._handlers.push({resolve, reject});
     }

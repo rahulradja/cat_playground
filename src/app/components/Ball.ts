@@ -12,6 +12,29 @@ export class Ball<TSettings extends BallSettings = BallSettings> extends Resizab
         super(settings)
         this.drawBall()
         this.drawShadow()
+        this.onParentChanged.on(() => this.updateMouseEvent())
+    }
+
+    public updateMouseEvent()
+    {
+        if (!this.parent) { return; }
+        const mainContainer = this.parent
+        mainContainer.eventMode = "dynamic"
+        this._ballGraphics.eventMode = "dynamic";
+        this._ballGraphics.on("mousedown", () => this.startDragging())
+        this._ballGraphics.cursor = "pointer"
+        mainContainer.on("mousemove", (e) =>
+        {
+            if (!this._isDragging || !this.parent) { return; }
+            this.position = this.parent.toLocal(e.global)
+            console.log(e.global)
+        }) 
+        mainContainer.addEventListener("mouseup", () => this._isDragging = false)
+
+    }
+
+    public update()
+    {
 
     }
 
@@ -19,25 +42,20 @@ export class Ball<TSettings extends BallSettings = BallSettings> extends Resizab
     {
         console.log("dragging")
         this._isDragging = true;
-
     }
 
     private drawBall()
     {
         this.addChild(this._ballGraphics)
         this._ballGraphics.circle(0, 0, this._settings.radius).fill(this._settings.color);
-        this._ballGraphics.eventMode = "dynamic";
-        this._ballGraphics.on("mousedown", () => this.startDragging())
-        this._ballGraphics.cursor = "pointer"
-        this.eventMode = "dynamic"
-        globalThis.addEventListener("mousemove", (e) =>
-        {
-            if (!this._isDragging || !this.parent) { return; }
-            const pos = (this.parent.toLocal({x: e.clientX, y: e.clientY}))
-            this.position = pos
-            console.log(e.clientX, e.clientY, pos)
-        })
-        globalThis.addEventListener("mouseup", () => this._isDragging = false)
+
+        // this.eventMode = "dynamic"
+        // this.parent?.on("mousemove", (e) =>
+        // {
+        //     if (!this._isDragging || !this.parent) { return; }
+        //     this.position = this.parent.toLocal(e.global)
+        //     console.log(e.global)
+        // })                                                          
     }
 
     private drawShadow()

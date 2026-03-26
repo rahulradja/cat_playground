@@ -1,7 +1,9 @@
-import { Container, ContainerOptions } from "pixi.js";
+import { Container, ContainerChild, ContainerOptions } from "pixi.js";
+import { BasicEvent } from "../utils/Event";
 
 export class ResizableContainer<TSettings extends ContainerSettings = ContainerSettings> extends Container
 {
+    public onParentChanged: BasicEvent = new BasicEvent()
     public get left() { return this.x - this.width/2 - this.pivot.x }
     public get right() { return this.x + this.width/2 - this.pivot.x }
     public get top() { return this.y - this.height/2 - this.pivot.y }
@@ -18,6 +20,17 @@ export class ResizableContainer<TSettings extends ContainerSettings = ContainerS
             this.pivot.x = (this._settings.anchor.x - 0.5) * width;
             this.pivot.y = (this._settings.anchor.y - 0.5) * height;
         }
+    }
+    
+    public addChild<U extends ContainerChild[]>(...children: U): U[0]
+    {
+        const result = super.addChild(...children)  
+        children.forEach((child) =>
+        { if (child instanceof ResizableContainer)
+        {
+            child.onParentChanged.fire()
+        }})
+        return result;
     }
 }
 

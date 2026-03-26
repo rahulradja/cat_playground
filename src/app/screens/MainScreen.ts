@@ -43,8 +43,7 @@ export class MainScreen extends Container  {
         this.mainContainer.addChild(this.wall)
         this.floor = new Background(this._settings.floor)
         this.mainContainer.addChild(this.floor)
-        this.ball = new Ball(this._settings.ball)
-        this.mainContainer.addChild(this.ball)
+
 
         this.logo =  new Sprite({texture: Texture.from("playground-logo.png")});
         this.mainContainer.addChild(this.logo)
@@ -53,6 +52,11 @@ export class MainScreen extends Container  {
         this.createCat(true)
 
         this.createIdleCats(5)
+
+        this.ball = new Ball(this._settings.ball)
+        this.ball.position.set(50, this.width/2 - 50)
+        this.mainContainer.addChild(this.ball)
+        // this.ball.updateMouseEvent(this.mainContainer)
         
         const buttonAnimations = {
             hover: {
@@ -96,8 +100,9 @@ export class MainScreen extends Container  {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public update(_time: Ticker) {
         if (this.paused) return;
-        this.cats.sort((catA, catB) => catA.y -catB.y)
-        this.cats.forEach((cat) => 
+        const sortableObjects =  [...this.cats, this.ball]
+        sortableObjects.sort((catA, catB) => catA.bottom - catB.bottom)
+        sortableObjects.forEach((cat) => 
         {
             cat.parent?.addChildAt(cat, cat.parent.children.length -2)
             cat.update(this.floor)
