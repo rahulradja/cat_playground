@@ -11,15 +11,18 @@ export class ResizableContainer<TSettings extends ContainerSettings = ContainerS
             
     constructor(protected _settings: TSettings) { super(_settings) } 
     public resize(width: number, height: number) {
-        this.width = width;
-        this.height = height;
+        this.setSize(width, height)
         this.x = -width/2;
-        this.y = -height/2
-        if (this._settings.anchor)
-        {
-            this.pivot.x = (this._settings.anchor.x - 0.5) * width;
-            this.pivot.y = (this._settings.anchor.y - 0.5) * height;
-        }
+        this.y = -height/2;
+        if (!this.parent) { return; }
+        this.setPivotFromAnchor(width, height)
+    }
+
+    public setPivotFromAnchor(width: number, height: number)
+    {
+        if (!this._settings.anchor) { return; }
+        this.pivot.x = (this._settings.anchor.x - 0.5) * width;
+        this.pivot.y = (this._settings.anchor.y - 0.5) * height;
     }
     
     public addChild<U extends ContainerChild[]>(...children: U): U[0]
