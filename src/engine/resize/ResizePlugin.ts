@@ -89,9 +89,10 @@ export class CreationResizePlugin
             }
 
             this._cancelResize!();
-
+            app.resize()
             // Throttle resize events per raf
-            this._resizeId = requestAnimationFrame(() => app.resize!());
+            // This line causes flickering
+            // this._resizeId = requestAnimationFrame(() => app.resize!());
         };
 
         /**
@@ -127,19 +128,23 @@ export class CreationResizePlugin
                 canvasHeight = clientHeight;
             }
 
-            const { width, height } = resize(
-                canvasWidth,
-                canvasHeight,
-                app.resizeOptions.minWidth,
-                app.resizeOptions.minHeight,
-                app.resizeOptions.letterbox,
-            );
+            // const { width, height } = resize(
+            //     canvasWidth,
+            //     canvasHeight,
+            //     app.resizeOptions.minWidth,
+            //     app.resizeOptions.minHeight,
+            //     app.resizeOptions.letterbox,
+            // );
 
+            //these lines cause laggy resizing
             app.renderer.canvas.style.width = `${canvasWidth}px`;
             app.renderer.canvas.style.height = `${canvasHeight}px`;
             window.scrollTo(0, 0);
 
-            app.renderer.resize(width, height);
+            // using this width and height causes gaps between background elements
+            // app.renderer.resize(width, height);
+            app.renderer.resize(globalThis.innerWidth, globalThis.innerHeight);
+            // app.queueResize()
         };
 
         this._cancelResize = (): void => 
