@@ -18,32 +18,38 @@ export class Background<TSettings extends BackgroundSettings = BackgroundSetting
     public resize(width: number, height: number)
     {
         super.resize(width, height);
-        this._fill.clear().rect(-width/2, -height/2, width, height)
-            .fill(this._settings.fill)
+        this.drawRect(this._fill, width, height).fill(this._settings.fill)
         this.addPattern()
-
+    }
+    
+    private drawRect(fill: Graphics, width?: number, height?: number): Graphics
+    {
+        width = width ?? this.width;
+        height = height ?? this.height;
+        fill.clear().rect(-width/2 , -height/2, width, height)
+        return fill
     }
 
     private fillBackground(): Graphics
     {
         const graphics = new Graphics();
         this.addChild(graphics);
-        graphics.rect(-this.width/2, -this.height/2, this.width, this.height)
-            .fill(this._settings.fill)
+        this.drawRect(graphics).fill(this._settings.fill)
         return graphics
     }
 
-    private addPattern()
+    private addPattern(width?: number, height?: number)
     {
         if (!this._settings.pattern) { return; }
+        width = width ?? this.width;
+        height = height ?? this.height;
         this._pattern.clear()
         const texture: Texture = Texture.from(this._settings.pattern.source)
         const fillPattern =  new FillPattern(texture, this._settings.pattern.repeat || "repeat")
-        fillPattern.transform = new Matrix().scale(this.height/this.width, 1) // scale it to retain aspect ratio
+        fillPattern.transform = new Matrix().scale(height/width, 1) // scale it to retain aspect ratio
         if (this._settings.pattern.transform) {fillPattern.transform.append(this._settings.pattern.transform)}
         
-        this._pattern.rect(-this.width/2, -this.height/2, this.width, this.height)
-        this._pattern.fill(fillPattern)
+        this._pattern = this.drawRect(this._pattern, width, height).fill(fillPattern)
         this._pattern.blendMode = this._settings.pattern.blendMode ?? "normal"
     }
 }
