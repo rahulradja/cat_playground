@@ -1,9 +1,10 @@
 import * as PIXI from "pixi.js"
 import { BoundedContainer, Position } from "../displayElements/BoundedContainer";
-import { DynamicObject, DynamicObjectSettings } from "./DynamicObject";
+import { DynamicObjectSettings } from "./DynamicObject";
+import { BackpackItem } from "./BackpackItem";
 
 
-export class Ball<TSettings extends BallSettings = BallSettings> extends DynamicObject<TSettings>
+export class Ball<TSettings extends BallSettings = BallSettings> extends BackpackItem<TSettings>
 {
     public speed: Position = { x: 0, y: 0 }
     private _shadowGraphics: PIXI.Graphics = new PIXI.Graphics();

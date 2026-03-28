@@ -57,7 +57,6 @@ export class MainScreen extends Container  {
         this.createIdleCats(5)
 
         this.ball = new Ball(this._settings.ball)
-        // this.ball.position.set(50, this.width/2 - 50)
         this.mainContainer.addChild(this.ball);
         this.backpack = new Backpack(this._settings.backpack);
         this.mainContainer.addChild(this.backpack)

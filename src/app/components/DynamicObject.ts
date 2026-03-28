@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js"
-import { ContainerSettings, ResizableContainer } from "../displayElements/ResizableContainer";
+import { ContainerSettings } from "../displayElements/ResizableContainer";
 import { BoundedContainer, Position } from "../displayElements/BoundedContainer";
 
 
