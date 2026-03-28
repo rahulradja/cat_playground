@@ -16,6 +16,14 @@ export class BackpackItem<TSettings extends DynamicObjectSettings = DynamicObjec
     {
         this._isDragging = false;
         if (!this._backpack) { return; }
-        this.isStashed.value = this.isIntersecting(this._backpack)
+        this.isStashed.value = this.isIntersecting(this._backpack);
+        this.zIndex = this.isStashed.value ? this._backpack.zIndex + 1 : 0
+    }
+
+    protected startDragging()
+    {
+        super.startDragging();
+        if (!this._backpack) { return; }
+        this.zIndex = this._backpack.zIndex + 1 ;
     }
 }

@@ -10,6 +10,12 @@ export class Backpack extends BoundedContainer<BackpackSettings>
     private _items: BackpackItem[] = [];
     public get items() { return this._items }
 
+    public get left() { return this.x - this._settings.background.size.width/2 - this.pivot.x }
+    public get right() { return this.x + this._settings.background.size.width/2 - this.pivot.x }
+    public get top() { return this.y - this._settings.background.size.height/2 - this.pivot.y }
+    public get bottom() { return this.y + this._settings.background.size.height/2 - this.pivot.y }
+            
+
     constructor(protected _settings: BackpackSettings)
     {
         super(_settings)
@@ -22,14 +28,13 @@ export class Backpack extends BoundedContainer<BackpackSettings>
         this._items.forEach((item) =>
         {
             if (!item.isStashed.value) { item.update(container)}
-            item.zIndex = item.isStashed.value ? this.zIndex + 1 : 0;
         })
     }
 
     public resize(width: number, height: number)
     {
-        this.position.set(-width/2, height/2)
-        this.moveStashedItems()
+        this.position.set(-width/2 + 20, -20 + height/2)
+        this.moveStashedItems();
     }
 
     public addToBackpack(...objects: BackpackItem[])
@@ -69,11 +74,12 @@ export class Backpack extends BoundedContainer<BackpackSettings>
     {
         const { backpackAsset, background } = this._settings
         this._backpackImage = new Sprite({texture: Texture.from(backpackAsset), scale: 0.09});
+        this._backpackImage.position.set(-background.size.width/2, -background.size.height/2)
         this._backpackImage.eventMode = "static";
         this._backpackImage.cursor = "pointer"
         this._backpackImage.on("click", () => this.stashAll());
         this.addChild(this._background, this._backpackImage)
-        this._background.roundRect(0, 0, background.size.width, background.size.height, background.radius).fill(background.color ?? "#ffffffbb")
+        this._background.roundRect(-background.size.width/2, -background.size.height/2, background.size.width, background.size.height, background.radius).fill(background.color ?? "#ffffffbb")
     }
 }
 
@@ -91,7 +97,7 @@ export interface BackpackSettings extends ContainerSettings
 export const defaultBackpackSettings: BackpackSettings =
 {
     backpackAsset: "backpack.png",
-    anchor: { x: 0.45, y: 1.6 },
+    anchor: { x: 0, y: 1 },
     background:
     {
         size: { width: 500, height: 100 },
