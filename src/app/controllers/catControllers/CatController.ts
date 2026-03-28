@@ -1,5 +1,5 @@
-import { CatState } from "../components/Cat";
-import { KeyboardInput } from "./KeyboardInput";
+import { CatState } from "../../components/Cat";
+import { KeyboardInput } from "../input/KeyboardInput";
 
 export abstract class ICatController
 {

@@ -17,5 +17,10 @@ export class BoundedContainer<TSettings extends ContainerSettings =ContainerSett
         return otherObject.right >= this.left && otherObject.left <= this.right
             && otherObject.bottom >= this.top && otherObject.top <= this.bottom
     }
+
+    public handleCollision(): void
+    {
+
+    }
 }
 export interface Position { x: number, y: number }

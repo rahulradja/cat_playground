@@ -12,8 +12,8 @@ import { Cat, CatSettings } from "../components/Cat.ts"
 // import { Floor } from "../../displayElements/Floor.ts";
 import { Background, BackgroundSettings } from "../displayElements/Background.ts";
 import { BoundedContainer } from "../displayElements/BoundedContainer.ts";
-import { CatKeyboardController } from "../controllers/CatController.ts";
-import { IdleController } from "../controllers/IdleController.ts";
+import { CatKeyboardController } from "../controllers/catControllers/CatController.ts";
+import { IdleController } from "../controllers/catControllers/IdleController.ts";
 import { randomArrayElement } from "../utils/TypeUtils.ts";
 import { Ball, BallSettings } from "../components/Ball.ts";
 import { Backpack, BackpackSettings, defaultBackpackSettings } from "../components/Backpack.ts";

@@ -1,8 +1,8 @@
 import { Ticker } from "pixi.js";
-import { CatState } from "../components/Cat";
+import { CatState } from "../../components/Cat";
 import { ICatController } from "./CatController"
-import { randomArrayElement } from "../utils/TypeUtils";
-import { Observable } from "../utils/Observable";
+import { randomArrayElement } from "../../utils/TypeUtils";
+import { Observable } from "../../utils/Observable";
 
 export class IdleController implements ICatController
 {
