@@ -57,11 +57,13 @@ export class MainScreen extends Container  {
         this.createIdleCats(5)
 
         this.ball = new Ball(this._settings.ball)
-        this.ball.position.set(50, this.width/2 - 50)
+        // this.ball.position.set(50, this.width/2 - 50)
         this.mainContainer.addChild(this.ball);
         this.backpack = new Backpack(this._settings.backpack);
         this.mainContainer.addChild(this.backpack)
-        this.backpack.addToBackpack(this.ball)
+        const ball = new Ball(ball2)
+        this.mainContainer.addChild(ball)
+        this.backpack.addToBackpack(this.ball, ball)
         
         const buttonAnimations = {
             hover: {
@@ -238,6 +240,13 @@ const wallGradient: FillGradient = new FillGradient({type: 'linear',
     ]
 })
 
+const ball2: BallSettings = 
+{
+    radius: 15,
+    color: "#ff7979",
+    friction: 0.99
+}
+
 export const DefaultMainScreenSettings: MainScreenSettings = 
 {
     backpack: defaultBackpackSettings,
@@ -246,7 +255,7 @@ export const DefaultMainScreenSettings: MainScreenSettings =
         radius: 25,
         color: "#ff7979",
         asset: "yarn.png",
-        friction: 0.99
+        friction: 0.96
     },
     wall:
     {

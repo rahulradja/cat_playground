@@ -27,6 +27,7 @@ export class Backpack extends BoundedContainer<BackpackSettings>
         this._items.forEach((item) =>
         {
             if (!item.isStashed) { item.item.update(container)}
+            item.isStashed = this.isIntersecting(item.item);
             item.item.zIndex = item.isStashed ? this.zIndex + 1 : 0;
         })
     }
@@ -37,11 +38,15 @@ export class Backpack extends BoundedContainer<BackpackSettings>
         this.moveStashedItems()
     }
 
-    public addToBackpack(element: DynamicObject)
+    public addToBackpack(...objects: DynamicObject[])
     {
-        this._items.push({item: element, isStashed: true});
-        if (!element.parent || !this.parent){ return; }
-        element.position = this.parent?.toGlobal(this.position)
+        objects.forEach((element) =>
+        {
+
+            this._items.push({item: element, isStashed: true});
+            if (!element.parent || !this.parent){ return; }
+            element.position = this.parent?.toGlobal(this.position)
+        })
     }
 
     public stashAll()
