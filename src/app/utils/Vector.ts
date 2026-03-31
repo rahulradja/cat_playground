@@ -4,7 +4,7 @@ import { BoundedContainer } from "../displayElements/BoundedContainer";
 export interface Position { x: number, y: number }
 export interface Polar { r: number, theta: number }
 
-export const Dot = (a: Position, b: Position) => a.x * b.x - a.y * b.y
+export const Dot = (a: Position, b: Position) => a.x * b.x + a.y * b.y
 export const CartesianToPolar = (p: Position): Polar => 
 {
     if (p.x === 0 && p.y === 0) { return {r: 0, theta: 0} }
@@ -53,10 +53,13 @@ export function handleDynamicCollision(obj1: DynamicObject, obj2: DynamicObject)
 
 export function handleStaticCollision(dynamicObj: DynamicObject, staticObj: BoundedContainer)
 {
-    const relativePosition = AtoB(dynamicObj.position, staticObj.position);
-    const speed = Magnitude(dynamicObj.speed)
-    const polarNormal = CartesianToPolar(relativePosition);
-    const polarIncoming = CartesianToPolar(dynamicObj.speed)
-    const polarOutgoing = {r: speed, theta: -2 * polarNormal.theta + polarIncoming.theta }
-    dynamicObj.speed = PolarToCartesian(polarOutgoing)
+    const restitution = dynamicObj.physicsProps.restitution;
+    const relativePosition = AtoB(staticObj.position, dynamicObj.position);
+    const distance = Magnitude(relativePosition)
+    const normal = Multiply(relativePosition, 1/distance);
+    const collisionDot = Dot( dynamicObj.speed, normal);
+    if (collisionDot > 0){ return } // dynamic object already moving away
+    const vx = dynamicObj.speed.x - (1 + restitution) * collisionDot * normal.x
+    const vy = dynamicObj.speed.y - (1 + restitution) * collisionDot * normal.y
+    dynamicObj.speed = {x: vx, y: vy}
 }

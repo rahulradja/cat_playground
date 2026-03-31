@@ -6,17 +6,19 @@ import { Position } from "../utils/Vector";
 export class DynamicObject<TSettings extends DynamicObjectSettings = DynamicObjectSettings> extends BoundedContainer<TSettings>
 {
     public speed: Position = { x: 0, y: 0 }
-    public weight: number;
-    protected _friction: number;
+    public get physicsProps(): PhysicsProperties
+    { return {
+        weight: this.settings.weight ?? 1,
+        friction: this.settings.friction ?? 1,
+        restitution: this.settings.restitution ?? 0.5
+    }}
     protected _isDragging: boolean = false
     protected _object!: PIXI.ViewContainer
     constructor(public settings:TSettings)
     {
         super(settings);
-        this.weight = settings.weight ?? 1;
         this.drawObject();
         this.onParentChanged.on(() => this.updateMouseEvent());
-        this._friction = this.settings.friction ?? 1;
     }
 
     public updateMouseEvent()
@@ -45,8 +47,8 @@ export class DynamicObject<TSettings extends DynamicObjectSettings = DynamicObje
         if (this.right >= container.right) { this.speed.x = -Math.abs(this.speed.x) }
         if (this.top <= container.top) { this.speed.y = Math.abs(this.speed.y) }
         if (this.bottom >= container.bottom) { this.speed.y = -Math.abs(this.speed.y)}
-        this.speed.x = this._friction * this.speed.x;
-        this.speed.y = this._friction * this.speed.y
+        this.speed.x = this.physicsProps.friction * this.speed.x;
+        this.speed.y = this.physicsProps.friction * this.speed.y
     }
 
     protected handleMouseUp()
@@ -65,9 +67,14 @@ export class DynamicObject<TSettings extends DynamicObjectSettings = DynamicObje
     }
 }
 
-export interface DynamicObjectSettings extends ContainerSettings
+export interface PhysicsProperties
 {
     /** between [0, 1] - 1 is no friction, 0 is infinite friction */
-    friction?: number
-    weight?: number
+    friction: number
+    weight: number
+    /** bounciness */
+    restitution: number
 }
+
+
+export interface DynamicObjectSettings extends ContainerSettings, Partial<PhysicsProperties> {}
