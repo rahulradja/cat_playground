@@ -3,9 +3,12 @@ import { BackpackItem } from "./BackpackItem";
 import * as PIXI from "pixi.js"
 import { RodSection } from "./RodSection";
 import { DynamicObjectSettings } from "./DynamicObject";
+import * as VECTOR from "../utils/Vector"
 
-export class Rod extends BackpackItem
+/** String like the kind you can tie - NOT string like the type (I couldn't think of a better way to name this)*/
+export class String extends BackpackItem
 {
+    private _mousePosition: VECTOR.Position = { x: 0, y: 0}
     private _rodSections: RodSection[] = []
     private get graphics()
     {
@@ -15,10 +18,10 @@ export class Rod extends BackpackItem
     constructor(settings: DynamicObjectSettings)
     {
         super(settings)
-        for (let i=0; i< 50; i++)
+        for (let i=0; i< 20; i++)
         {
 
-            const rodSection = new RodSection();
+            const rodSection = new RodSection(10, {x: 0, y: i*10}, {x: 0, y: (i+1) * 10});
             this._rodSections.push(rodSection)
         }
         this.drawUpdate();
@@ -27,14 +30,20 @@ export class Rod extends BackpackItem
     public update(container: BoundedContainer)
     {
         super.update(container)
+        this.updateStartPos();
         this._rodSections.forEach((section) => section.update())
         this.drawUpdate();
     }
 
     protected handleMouseMove(e: PIXI.FederatedMouseEvent)
     {
+        this._mousePosition = this.toLocal(e.global)
+    }
+
+    protected updateStartPos()
+    {
         if (!this._isDragging.value || !this.parent) { return; }
-        this._rodSections[0].updateStartPos(this.toLocal(e.global))
+        this._rodSections[0].updateStartPos(this._mousePosition)
         for (let i=1; i<this._rodSections.length; i++)
         {
             this._rodSections[i].updateStartPos(this._rodSections[i-1].endPos)

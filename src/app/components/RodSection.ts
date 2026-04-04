@@ -2,16 +2,21 @@ import * as VECTOR from "../utils/Vector";
 
 export class RodSection
 {
-    private _radius: number = 10
-    private _startPos: VECTOR.Position = { x: 0, y: 0 }
     public get startPos() : VECTOR.Position { return this._startPos}
-    private _endPos: VECTOR.Position = { x: 0, y: this._radius }
     public get endPos() { return this._endPos }
-    
-    constructor() { }
+    private _velocity: VECTOR.Position = {x: 0, y: 0}
+
+    constructor(private _radius: number, private _startPos: VECTOR.Position, private _endPos: VECTOR.Position) { }
 
     public update()
     {
+        const direction = VECTOR.Subtract(this._endPos, this.startPos)
+        const theta = Math.atan(direction.x/Math.abs(direction.y))
+        this._velocity = {x: this._velocity.x + 0.05 * Math.cos(theta) * Math.sin(theta), y: this._velocity.y + 0.01 * Math.pow(Math.cos(theta), 2)}
+        const newEndDirection = { x: this._endPos.x + this._velocity.x - this._startPos.x, y: this._endPos.y + this._velocity.y - this._startPos.y}
+        const distance = VECTOR.Magnitude(newEndDirection)
+        this._endPos = VECTOR.Add(this._startPos, VECTOR.Multiply(newEndDirection, this._radius/distance))
+
     }
 
     public updateStartPos(startPos: VECTOR.Position)
