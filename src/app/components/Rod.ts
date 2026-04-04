@@ -1,5 +1,5 @@
 import { BoundedContainer } from "../displayElements/BoundedContainer";
-import { Position } from "../utils/Vector";
+import { Magnitude, Position } from "../utils/Vector";
 import { BackpackItem } from "./BackpackItem";
 import * as PIXI from "pixi.js"
 
@@ -7,32 +7,38 @@ export class Rod extends BackpackItem
 {
     private _radius: number = 100
     private _endPos: Position = { x: 0, y: this._radius }
+    private _rotVel: number = 0;
     private get graphics()
     {
         return this._object as PIXI.Graphics
     }
 
+    /**theta measured from vertical downwards */
     private _theta: number = 0;
     public set theta(val: number)
     {
-        this._endPos = { x: this._radius * Math.sin(val), y: this._radius * Math.cos(val)}
+        this._theta = val % (Math.PI * 2)
+        this._endPos = { x: this._radius * Math.sin(this._theta), y: this._radius * Math.cos(this._theta)}
         this.drawUpdate();
-        this._theta = val
     }
 
     public update(container: BoundedContainer)
     {
         super.update(container)
-        this.theta = this._theta > 0 ? Math.max(0, this._theta - 0.1) : Math.min(0, this._theta + 0.1)
+        if (this._rotVel === 0 && this._theta === 0) { return; }
+        const rotAccel = -0.1 * Math.sin(this._theta) 
+        this.theta = this._theta + rotAccel
     }
 
     protected handleMouseMove(e: PIXI.FederatedMouseEvent)
     {
         if (!this._isDragging.value || !this.parent) { return; }
         this.position = this.parent.toLocal(e.global)
-        // this.speed.x = e.movementX
-        // this.speed.y = e.movementY
-        this.theta = Math.min(Math.PI/2, Math.max(-Math.PI/2, this._theta - Math.atan(e.movementX/this._radius)))
+        const endDirection = {x:this._endPos.x - e.movementX, y: this._endPos.y - e.movementY}
+        const distance = Magnitude(endDirection)
+        this._endPos = { x: endDirection.x * this._radius/distance, y: endDirection.y * this._radius/distance}
+        this._theta = Math.atan(this._endPos.x/Math.abs(this._endPos.y))
+        this.drawUpdate();    
     }
 
     protected drawUpdate()
