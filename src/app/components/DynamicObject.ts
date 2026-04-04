@@ -29,13 +29,7 @@ export class DynamicObject<TSettings extends DynamicObjectSettings = DynamicObje
         this._object.eventMode = "dynamic";
         this._object.on("pointerdown", () => this.startDragging())
         this._object.cursor = "pointer"
-        this.parent.on("pointermove", (e) =>
-        {
-            if (!this._isDragging.value || !this.parent) { return; }
-            this.position = this.parent.toLocal(e.global)
-            this.speed.x = e.movementX
-            this.speed.y = e.movementY
-        }) 
+        this.parent.on("pointermove", (e) => this.handleMouseMove(e)) 
         this.parent.addEventListener("pointerup", () => this.handleMouseUp())
     }
 
@@ -50,6 +44,14 @@ export class DynamicObject<TSettings extends DynamicObjectSettings = DynamicObje
         if (this.bottom >= container.bottom) { this.speed.y = -Math.abs(this.speed.y)}
         this.speed.x = this.physicsProps.friction * this.speed.x;
         this.speed.y = this.physicsProps.friction * this.speed.y
+    }
+
+    protected handleMouseMove(e: PIXI.FederatedMouseEvent)
+    {
+        if (!this._isDragging.value || !this.parent) { return; }
+        this.position = this.parent.toLocal(e.global)
+        this.speed.x = e.movementX
+        this.speed.y = e.movementY
     }
 
     protected handleMouseUp()

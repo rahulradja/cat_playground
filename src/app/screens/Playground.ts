@@ -13,6 +13,8 @@ import { Backpack, BackpackSettings, defaultBackpackSettings } from "../componen
 import { CollisionEngine } from "../controllers/physics/CollisionEngine.ts";
 import { ContainerSettings } from "../displayElements/ResizableContainer.ts";
 import { BallVertical, BallVerticalSettings } from "../components/BallVertical.ts";
+import { Rod } from "../components/Rod.ts";
+import { BackpackItem } from "../components/BackpackItem.ts";
 
 /** The screen that holds the app */
 export class Playground extends BoundedContainer<PlaygroundSettings>  
@@ -22,7 +24,7 @@ export class Playground extends BoundedContainer<PlaygroundSettings>
 
     public floor: Background;
     protected _settings: PlaygroundSettings = DefaultPlaygroundSettings;
-    private balls: Ball[] = [];
+    private items: BackpackItem[] = [];
     private backpack!: Backpack;
     private cats: Cat[]=[];
     private collisionEngine: CollisionEngine = new CollisionEngine();
@@ -41,6 +43,7 @@ export class Playground extends BoundedContainer<PlaygroundSettings>
         this.backpack = new Backpack(this._settings.backpack);
         this.addChild(this.backpack)
         this._settings.balls.forEach((ball) => this.createBall(ball));
+        this.createRod();
     }
 
     /** Prepare the screen just before showing */
@@ -95,7 +98,17 @@ export class Playground extends BoundedContainer<PlaygroundSettings>
         this.addChild(ball)
         this.backpack.addToBackpack(ball);
         this.collisionEngine.startTracking(ball);
-        this.balls.push(ball)
+        this.items.push(ball)
+        return ball
+    }
+
+    private createRod(): Rod
+    {
+        const ball = new Rod({})
+        this.addChild(ball)
+        this.backpack.addToBackpack(ball);
+        this.collisionEngine.startTracking(ball);
+        this.items.push(ball)
         return ball
     }
 

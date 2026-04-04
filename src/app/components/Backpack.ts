@@ -27,7 +27,7 @@ export class Backpack extends BoundedContainer<BackpackSettings>
     {
         this._items.forEach((item) =>
         {
-            if (!item.isStashed.value) { item.update(container)}
+            item.update(container);
         })
     }
 

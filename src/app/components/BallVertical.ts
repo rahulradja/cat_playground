@@ -34,7 +34,7 @@ export class BallVertical<TSettings extends BallVerticalSettings = BallVerticalS
 
     public update(container: BoundedContainer)
     {
-        if (this._isDragging.value) { return; }
+        if (this._isDragging.value || this.isStashed.value) { return; }
         super.update(container);
         this.speed.z = this.getNewZSpeed();
         this.zPos = Math.max(0, this._zPos - this.speed.z)

@@ -15,7 +15,7 @@ export class Ball<TSettings extends BallSettings = BallSettings> extends Backpac
 
     public update(container: BoundedContainer)
     {
-        if (this._isDragging.value) { return; }
+        if (this._isDragging.value || this.isStashed.value) { return; }
         super.update(container);
         this._object.rotation += this.speed.x / (Math.PI * this.settings.radius)
     }
