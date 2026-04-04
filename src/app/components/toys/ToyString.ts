@@ -6,16 +6,16 @@ import { DynamicObjectSettings } from "../physicsObjects/DynamicObject";
 import * as VECTOR from "../../utils/Vector"
 
 /** String like the kind you can tie - NOT string like the type (I couldn't think of a better way to name this)*/
-export class String<TSettings extends StringSettings = StringSettings> extends BackpackItem<StringSettings>
+export class ToyString<TSettings extends StringSettings = StringSettings> extends BackpackItem<StringSettings>
 {
-    private _startPosition: VECTOR.Position = { x: 0, y: 0}
-    private _rodSections: RodSection[] = []
-    private get graphics()
+    protected _startPosition: VECTOR.Position = { x: 0, y: 0}
+    protected _rodSections: RodSection[] = []
+    protected get graphics()
     {
         return this._object as PIXI.Graphics
     }
 
-    constructor(settings: TSettings)
+    constructor(public settings: TSettings)
     {
         super(settings)
         const r = settings.sectionLength
@@ -24,7 +24,7 @@ export class String<TSettings extends StringSettings = StringSettings> extends B
             const rodSection = new RodSection(r, {x: 0, y: i*r}, {x: 0, y: (i+1) * r});
             this._rodSections.push(rodSection)
         }
-        this.drawUpdate();
+        // this.drawUpdate();
         this.isStashed.onChanged((stashed) => {if (stashed) { this.handleStashed()}})
     }
 
@@ -75,7 +75,6 @@ export class String<TSettings extends StringSettings = StringSettings> extends B
 
     protected drawUpdate()
     {
-        console.log("drawing update")
         this.graphics.clear();
         this.graphics.moveTo(this._rodSections[0].startPos.x, this._rodSections[0].startPos.y)
             .lineTo(this._rodSections[0].endPos.x, this._rodSections[0].endPos.y)

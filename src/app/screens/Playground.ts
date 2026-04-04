@@ -13,7 +13,7 @@ import { Backpack, BackpackSettings, defaultBackpackSettings } from "../componen
 import { CollisionEngine } from "../controllers/physics/CollisionEngine.ts";
 import { ContainerSettings } from "../displayElements/ResizableContainer.ts";
 import { BallVertical, BallVerticalSettings } from "../components/toys/BallVertical.ts";
-import { String } from "../components/toys/String.ts";
+import { CatWand, CatWandSettings } from "../components/toys/CatWand.ts";
 import { BackpackItem } from "../components/backpack/BackpackItem.ts";
 
 /** The screen that holds the app */
@@ -102,9 +102,9 @@ export class Playground extends BoundedContainer<PlaygroundSettings>
         return ball
     }
 
-    private createString(): String
+    private createString(): CatWand
     {
-        const ball = new String({sectionCount: 20,  sectionLength: 10, stroke:{ color: "#6b1000", width: 5 }})
+        const ball = new CatWand(this._settings.catWand)
         this.addChild(ball)
         this.backpack.addToBackpack(ball);
         this.collisionEngine.startTracking(ball);
@@ -149,6 +149,7 @@ export interface PlaygroundSettings extends ContainerSettings
     floor: BackgroundSettings;
     balls: BallVerticalSettings[];
     backpack: BackpackSettings;
+    catWand: CatWandSettings;
 }
 
 const floorGradient: FillGradient = new FillGradient({
@@ -163,6 +164,13 @@ const floorGradient: FillGradient = new FillGradient({
 export const DefaultPlaygroundSettings: PlaygroundSettings = 
 {
     backpack: defaultBackpackSettings,
+    catWand:
+    {
+        sectionCount: 20,  
+        sectionLength: 10, 
+        stroke:{ color: "#6b1000", width: 5 }, 
+        rod: { color: "#291d19", width: 10 }
+    },
     balls:
     [
         {
