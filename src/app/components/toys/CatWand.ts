@@ -30,12 +30,11 @@ export class CatWand<TSettings extends CatWandSettings = CatWandSettings> extend
                 .stroke(this.settings.stroke)
         }
         const lastSect = this._rodSections[this._rodSections.length -1]
-        this._mouse.position.set(lastSect.endPos.x + this._rodTip.x - this._mouse.width/2, lastSect.endPos.y + this._rodTip.y)
+        const xOffset = lastSect.theta > 0 ? this._mouse.width/2 : -this._mouse.width/2
+        this._mouse.position.set(lastSect.endPos.x + this._rodTip.x - xOffset, lastSect.endPos.y + this._rodTip.y)
         this._mouse.rotation = -lastSect.theta;
-        // this._mouse.clear()
-        //     .rotateTransform(-lastSect.theta)
-        //     .ellipse(0,0, 10, 20)
-        //     .fill({ color: "#999999"})
+        const scale = this.settings.endItem.scale ?? 1;
+        this._mouse.scale.x = lastSect.theta > 0 ? scale : -scale;
     }
 
 }

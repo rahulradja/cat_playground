@@ -11,9 +11,8 @@ export class RodSection
         return Math.atan(direction.x/Math.abs(direction.y))
     }
     private _velocity: VECTOR.Position = {x: 0, y: 0}
-    private gravity:number = 0.02
 
-    constructor(private _radius: number, private _startPos: VECTOR.Position, private _endPos: VECTOR.Position) { }
+    constructor(private _radius: number, private _startPos: VECTOR.Position, private _endPos: VECTOR.Position, public gravity: number = 0.02) { }
 
     public update()
     {
@@ -28,11 +27,8 @@ export class RodSection
     {
         const direction = VECTOR.Subtract(this._endPos, startPos)
         const distance = VECTOR.Magnitude(direction)
-        const newEndPos = { x: direction.x * this._radius/distance + startPos.x, y: direction.y * this._radius/distance + startPos.y}
-        this._startPos = startPos
-        const movement = VECTOR.Subtract(this._endPos, newEndPos)
-        if (movement.x !== 0 || movement.y !== 0) { console.log(movement) }
-        this._endPos = newEndPos
+        this._startPos = startPos;
+        this._endPos = { x: direction.x * this._radius/distance + startPos.x, y: direction.y * this._radius/distance + startPos.y}
     }
 
     public reset(startPos: VECTOR.Position)

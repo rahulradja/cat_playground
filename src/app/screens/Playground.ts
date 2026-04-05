@@ -43,7 +43,7 @@ export class Playground extends BoundedContainer<PlaygroundSettings>
         this.backpack = new Backpack(this._settings.backpack);
         this.addChild(this.backpack)
         this._settings.balls.forEach((ball) => this.createBall(ball));
-        this.createString();
+        this._settings.catWands.forEach((wand) => this.createWand(wand));
     }
 
     /** Prepare the screen just before showing */
@@ -102,14 +102,14 @@ export class Playground extends BoundedContainer<PlaygroundSettings>
         return ball
     }
 
-    private createString(): CatWand
+    private createWand(settings: CatWandSettings): CatWand
     {
-        const ball = new CatWand(this._settings.catWand)
-        this.addChild(ball)
-        this.backpack.addToBackpack(ball);
-        this.collisionEngine.startTracking(ball);
-        this.items.push(ball)
-        return ball
+        const wand = new CatWand(settings)
+        this.addChild(wand)
+        this.backpack.addToBackpack(wand);
+        this.collisionEngine.startTracking(wand);
+        this.items.push(wand)
+        return wand
     }
 
     private getNewColor(): string
@@ -149,7 +149,7 @@ export interface PlaygroundSettings extends ContainerSettings
     floor: BackgroundSettings;
     balls: BallVerticalSettings[];
     backpack: BackpackSettings;
-    catWand: CatWandSettings;
+    catWands: CatWandSettings[];
 }
 
 const floorGradient: FillGradient = new FillGradient({
@@ -164,24 +164,46 @@ const floorGradient: FillGradient = new FillGradient({
 export const DefaultPlaygroundSettings: PlaygroundSettings = 
 {
     backpack: defaultBackpackSettings,
-    catWand:
-    {
-        sectionCount: 15,  
-        sectionLength: 10, 
-        stroke:{ color: "#6b1000", width: 5, cap: 'round' }, 
-        rod: 
-        { 
-            stroke: {color: "#291d19", width: 10, cap: 'round' },
-            tip:  {x: 60, y: -60},
-            base: {x: -40, y: 70}
-        },
-        endItem: 
+    catWands:
+    [
+
         {
-            asset: "mouse.png",
-            scale: 0.2
+            sectionCount: 15,  
+            sectionLength: 10, 
+            stroke:{ color: "#360a02", width: 3, cap: 'round' }, 
+            rod: 
+            { 
+                stroke: {color: "#790744", width: 10, cap: 'round' },
+                tip:  {x: 60, y: -60},
+                base: {x: -40, y: 70}
+            },
+            sectionGravity:  0.05,
+            endItem: 
+            {
+                asset: "mouse.png",
+                scale: 0.2
+            },
+            stashedScale: 0.5
         },
-        stashedScale: 0.5
-    },
+        {
+            sectionCount: 15,  
+            sectionLength: 10, 
+            sectionGravity:  0.01,
+            stroke:{ color: "#0e021e", width: 3, cap: 'round' }, 
+            rod: 
+            { 
+                stroke: {color: "#7d32f5", width: 10, cap: 'round' },
+                tip:  {x: 60, y: -60},
+                base: {x: -40, y: 70}
+            },
+            endItem: 
+            {
+                asset: "feather.png",
+                scale: 0.2
+            },
+            stashedScale: 0.5
+        },
+    ],
     balls:
     [
         {

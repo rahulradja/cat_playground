@@ -20,7 +20,7 @@ export class ToyString<TSettings extends StringSettings = StringSettings> extend
         const r = settings.sectionLength
         for (let i=0; i< settings.sectionCount; i++)
         {
-            const rodSection = new RodSection(r, {x: 0, y: i*r}, {x: 0, y: (i+1) * r});
+            const rodSection = new RodSection(r, {x: 0, y: i*r}, {x: 0, y: (i+1) * r}, settings.sectionGravity);
             this._rodSections.push(rodSection)
         }
     }
@@ -95,6 +95,7 @@ export class ToyString<TSettings extends StringSettings = StringSettings> extend
 
 export interface StringSettings extends BackpackItemSettings
 {
+    sectionGravity?: number
     /** how many subdivisions of the string are there */
     sectionCount: number;
     /** hos long is each subdivision */
