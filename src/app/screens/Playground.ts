@@ -182,7 +182,7 @@ export const DefaultPlaygroundSettings: PlaygroundSettings =
         {
             radius: 25,
             color: "#ff7979",
-            asset: "yarn.png",
+            asset: "yarn-ball.png",
             restitution: 0.5,
             friction: 0.96,
             weight: 0.5
