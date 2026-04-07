@@ -47,6 +47,7 @@ export class Playground extends BoundedContainer<PlaygroundSettings>
         this._settings.catWands.forEach((wand) => this.createWand(wand));
         const catBed: CatBed = new CatBed({scale: 0.3, frontAsset: "cat-bed-front.png", backAsset: "cat-bed-back.png"})
         this.addChild(catBed)
+        this.floor.blockingObjects.push(catBed)
         catBed.position.set(this.left, this.top)
         this.collisionEngine.startTracking(catBed)
     }

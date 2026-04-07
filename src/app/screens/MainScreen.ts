@@ -152,9 +152,9 @@ export interface MainScreenSettings extends ContainerOptions
 
 const wallGradient: FillGradient = new FillGradient({type: 'linear',
     colorStops: [
-        { offset: 0, color: "#d66b44" }, 
-        { offset: 0.3, color: "#d4ac85" },
-        { offset: 1, color: "#9b7368" },
+        { offset: 0, color: "#f8c1bb" }, 
+        { offset: 0.3, color: "#e79898" },
+        { offset: 1, color: "#c8806c" },
     ]
 })
 
