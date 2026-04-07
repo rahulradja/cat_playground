@@ -27,10 +27,11 @@ export class CatBedInteraction implements IInteractionHandler<Cat, CatBed>
         this.catBed.cat = this.cat;
         this.cat.setIsInBed(true)
         this.cat.zIndex = 0;
-        this.cat.position.set(this.catBed.width, this.catBed.height/2)
         this._originalCatScale = this.cat.scale;
         this.cat.scale.x = this.cat.scale.x/this.catBed.scale.x;
         this.cat.scale.y = this.cat.scale.y/this.catBed.scale.y;
+        const newXPos = this.cat.scale.x > 0 ? this.catBed.width : 4*this.catBed.width/5
+        this.cat.position.set(newXPos, this.catBed.height/3)
         await this.waitForInteractionEnd()
     }
 
@@ -53,7 +54,7 @@ export class CatBedInteraction implements IInteractionHandler<Cat, CatBed>
         this.catBed.cat = null;
         this.cat.setIsInBed(false)
         this.interactionContext.playground.addChild(this.cat)
-        this.cat.position.set(this.catBed.position.x, this.catBed.position.y + 100)
+        this.cat.position.set(this.catBed.position.x + this.catBed.width/2, this.catBed.position.y + this.catBed.height)
         this.cat.scale.x = this._originalCatScale.x * this.catBed.scale.x;
         this.cat.scale.y = this._originalCatScale.y * this.catBed.scale.y;
     }
