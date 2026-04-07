@@ -31,6 +31,7 @@ export class Playground extends BoundedContainer<PlaygroundSettings>
     private cats: Cat[]=[];
     private collisionEngine: CollisionEngine = new CollisionEngine({playground: this, backpack: this.backpack});
     private paused = false;
+    private catBed: CatBed;
     private catColors: string[] =  ["black", "grey", "orange", "white", "kyle", "silverBengal", "snowLeopard"]
 
     constructor(_settings: PlaygroundSettings, private _onScreenInput: OnScreenInput) {
@@ -47,11 +48,11 @@ export class Playground extends BoundedContainer<PlaygroundSettings>
         this.addChild(this.backpack)
         this._settings.balls.forEach((ball) => this.createBall(ball));
         this._settings.catWands.forEach((wand) => this.createWand(wand));
-        const catBed: CatBed = new CatBed({scale: 0.3, frontAsset: "cat-bed-front.png", backAsset: "cat-bed-back.png"})
-        this.addChild(catBed)
-        this.floor.blockingObjects.push(catBed)
-        catBed.position.set(this.left, this.top)
-        this.collisionEngine.startTracking(catBed)
+        this.catBed= new CatBed({scale: 0.3, frontAsset: "cat-bed-front.png", backAsset: "cat-bed-back.png"})
+        this.addChild(this.catBed)
+        this.floor.blockingObjects.push(this.catBed)
+        this.catBed.position.set(this.floor.left, this.floor.top)
+        this.collisionEngine.startTracking(this.catBed)
     }
 
     /** Prepare the screen just before showing */
@@ -98,6 +99,7 @@ export class Playground extends BoundedContainer<PlaygroundSettings>
         this.floor.position.set(0, height/2)
         this.backpack.zIndex = 2;
         this.backpack.resize(width, height);
+        this.catBed.position.set(this.floor.left + this.catBed.width/2, this.floor.top)
     }
 
     private createBall(settings: BallSettings): Ball
