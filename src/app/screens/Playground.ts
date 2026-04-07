@@ -28,7 +28,7 @@ export class Playground extends BoundedContainer<PlaygroundSettings>
     private items: BackpackItem[] = [];
     private backpack!: Backpack;
     private cats: Cat[]=[];
-    private collisionEngine: CollisionEngine = new CollisionEngine();
+    private collisionEngine: CollisionEngine = new CollisionEngine({playground: this, backpack: this.backpack});
     private paused = false;
     private catColors: string[] =  ["black", "grey", "orange", "white", "kyle", "silverBengal", "snowLeopard"]
 

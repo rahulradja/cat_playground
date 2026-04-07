@@ -5,11 +5,17 @@ import { Cat } from "../Cat";
 
 export class CatBed<TSettings extends CatBedSettings = CatBedSettings> extends BoundedContainer<CatBedSettings>
 {
+    public get isOccupied() { return this._cat !== null }
     private _front: PIXI.Sprite;
     private _back: PIXI.Sprite;
 
-    private _cat: Cat | null = null;
-    public get cat(): Cat | null { return this._cat}
+    public _cat: Cat | null = null;
+    public get cat(): Cat | null { return this._cat }
+    public set cat(val: Cat | null)
+    {
+        if (val !== null && this._cat !== null) { return; }
+        this._cat = val
+    }
 
     constructor(settings: TSettings)
     {
@@ -19,19 +25,6 @@ export class CatBed<TSettings extends CatBedSettings = CatBedSettings> extends B
         this.addChild(this._front, this._back)
         this._front.zIndex = 1;
         this._back.zIndex = -1
-    }
-
-    public addCat(cat: Cat)
-    {
-        this._cat = cat;
-        cat.parent?.removeChild(this._cat);
-        this.addChild(cat)
-        cat.zIndex = 0;
-        cat.enterCatBed()
-        cat.position.set(this.width, this.height/2)
-        if (!this.scale) { return; }
-        cat.scale.x = cat.scale.x/this.scale.x;
-        cat.scale.y = cat.scale.y/this.scale.y;
     }
 }
 

@@ -1,8 +1,10 @@
+import { BasicEvent } from "../../utils/Event";
 import { KeyState } from "./KeyState";
 
 export class KeyboardInput
 {
-    public trackedKeys: KeyState[] = []
+    public trackedKeys: KeyState[] = [];
+    public onTrackedKeyPressed: BasicEvent = new BasicEvent();
 
     public get pressedKeys(): string[]
     {
@@ -22,10 +24,14 @@ export class KeyboardInput
         if (existingKeyState){ return; }
         const newKeyState = new KeyState(keyCode);
         this.trackedKeys.push(newKeyState)
+        newKeyState.keyPressed.on(() => this.onTrackedKeyPressed.fire())
     }
 
     public untrackKey(keyCode: string)
     {
+        const keyToUntrack = this.getKeyState(keyCode);
+        if (!keyToUntrack) { return; }
+        keyToUntrack.keyPressed.clearHandlers();
         this.trackedKeys = this.trackedKeys.filter((key) => key.keyCode !== keyCode)
     }
 

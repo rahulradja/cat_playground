@@ -60,8 +60,8 @@ export class Navigation {
 
     public init(app: CreationEngine) {
         this.app = app;
-        // globalThis.__PIXI_STAGE__ = this.app.stage;
-        // globalThis.__PIXI_RENDERER__ = this.app.renderer;
+        globalThis.__PIXI_STAGE__ = this.app.stage;
+        globalThis.__PIXI_RENDERER__ = this.app.renderer;
     }
 
     /** Set the  default load screen */

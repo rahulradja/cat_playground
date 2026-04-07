@@ -5,11 +5,14 @@ import { BoundedContainer } from "../../displayElements/BoundedContainer";
 import { handleDynamicCollision, handleStaticCollision } from "../../utils/Vector";
 import { Cat } from "../../components/Cat";
 import { CatBed } from "../../components/furniture/CatBed";
+import { IInteractionHandler, InteractionContext } from "../../interactions/IInteraction";
+import { CatBedInteraction } from "../../interactions/CatBedInteraction";
 
 export enum CollisionType { Static, Dynamic, Dynamic3D }
 
 export class CollisionEngine
 {
+    private _interactions: IInteractionHandler[] = [];
     private _trackedStaticObjects: BoundedContainer[] = [];
     private _trackedDynamicObjects: DynamicObject[] = [];
     private _trackedDynamic3DObjects: BallVertical[] = [];
@@ -21,6 +24,8 @@ export class CollisionEngine
             ...this._trackedStaticObjects
         ]
     }
+
+    constructor(public interactionContext: InteractionContext){}
 
     public startTracking(object: BoundedContainer | DynamicObject | BallVertical)
     {
@@ -47,12 +52,10 @@ export class CollisionEngine
     {
         if ( (a instanceof Cat || b instanceof Cat) && (a instanceof CatBed || b instanceof CatBed) )
         {
-            const catBed: CatBed = a instanceof CatBed ? a : b as CatBed
-            const cat = a instanceof Cat ? a : b as Cat
-            if (!catBed.cat)
-            {
-                catBed.addCat(cat)
-            }
+            const cat = a instanceof Cat ? a : b as Cat;
+            const catBed = a instanceof CatBed ? a : b as CatBed;
+            const newInteraction = new CatBedInteraction(cat, catBed, this.interactionContext)
+            newInteraction.startInteraction();
         }
         const isStashedBackpackItem = (el: BoundedContainer) => el instanceof BackpackItem && (el as BackpackItem).isStashed.value;
         if (isStashedBackpackItem(a) || isStashedBackpackItem(b)){ return; }

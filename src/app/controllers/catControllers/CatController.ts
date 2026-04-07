@@ -1,5 +1,4 @@
 import { CatState } from "../../components/Cat";
-import { BasicEvent } from "../../utils/Event";
 import { KeyboardInput } from "../input/KeyboardInput";
 
 export abstract class ICatController
@@ -23,8 +22,7 @@ export class CatKeyboardController implements ICatController
     public get isGoingRight() { return this._keyboardInput.isKeyPressed("ArrowRight") ?? false };
     public get activeDirections(){ return [this.isGoingDown, this.isGoingLeft, this.isGoingRight, this.isGoingUp].filter((bool) => bool === true) }
 
-    private _onKeyPressed: BasicEvent = new BasicEvent()
-    public get onKeyPressed() { return this._onKeyPressed }
+    public get onKeyPressed() { return this._keyboardInput.onTrackedKeyPressed }
     private _keyboardInput: KeyboardInput
 
     constructor()

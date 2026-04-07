@@ -1,13 +1,14 @@
 import {  Texture, AnimatedSprite, AnimatedSpriteFrames, Sprite, Graphics } from "pixi.js"
 import * as PIXI from "pixi.js"
 import { BoundedContainer } from "../displayElements/BoundedContainer";
-import { ICatController } from "../controllers/catControllers/CatController";
+import { CatKeyboardController, ICatController } from "../controllers/catControllers/CatController";
 
 export enum CatState { Walking, Standing, Sitting, Sleeping, InBed }
 
 export class Cat extends BoundedContainer<CatSettings> {
     public speed!: number;
 
+    public get isUserControlled() { return this._catController instanceof CatKeyboardController }
     public get top() { return this.y + this.height/2 - 30 - this.pivot.y }
 
     private _catState: CatState = CatState.Sleeping;
@@ -15,6 +16,15 @@ export class Cat extends BoundedContainer<CatSettings> {
     private _walkingSprite: AnimatedSprite;
     private _sittingSprite: Sprite;
     private _sleepingSprite: Sprite;
+
+    public get onKeyPressed() 
+    { 
+        if (this._catController instanceof CatKeyboardController)
+        {
+            return (this._catController as CatKeyboardController).onKeyPressed
+        }
+        return null;
+    }
 
     private _nextStatePromise: { resolve: (success: boolean) => void, reject:(reason?: unknown) => void } | undefined;
 
@@ -40,10 +50,20 @@ export class Cat extends BoundedContainer<CatSettings> {
         if (this._catState === CatState.InBed) { return; }
         this.move(parent);
     }
-
-    public enterCatBed()
+    
+    public stop()
     {
-        this.setCatState(CatState.InBed);
+        this._catController.handleCatCollision()
+    }
+
+    public setIsInBed(val: boolean)
+    {
+        if (val)
+        {
+            this.setCatState(CatState.InBed);
+            return; 
+        }
+        this.setCatState(CatState.Standing)
     }
     
     private setCatState(newState: CatState)
